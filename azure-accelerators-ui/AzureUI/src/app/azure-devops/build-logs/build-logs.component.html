@@ -1,0 +1,122 @@
+<div class="container-fluid" *ngIf="enablelog">
+    <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-fall" [fullScreen]="true">
+      <p class="white"></p>
+    </ngx-spinner>
+    <div class="text-left mt-5 details" style="display:inline">
+        {{org}} | {{sourceProjectName}} | {{pipelinename}} |
+      <div class="sourceId">
+        <h6 class="details"><em>Run</em></h6>
+      </div>
+    </div>
+<div class="div-shadow">
+    <table id="associationTable" class="table table-striped" aria-describedby="list-key-vaults">
+      <thead>
+        <tr>
+          <!-- <th id="list-key-vault-name">Pipeline ID</th>
+          <th id="list-key-vault-name"> Pipeline Name</th> -->
+          <th id="list-key-vault-name">ID</th>
+          <th id="list-key-vault-uri">Reason</th>
+          <th id="list-key-vault-location">Branch</th>
+          <th id="list-key-vault-location">Elapsed Time</th>
+          <th id="list-key-vault-action">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let logs of associatedlogs">
+          <!-- <td>
+            <img alt="Image result for key vaults svg images" style="width:25px;height:25px;" class="mr-2"
+            src="../../assets/images/logs.png">
+            &nbsp;
+            {{logs?.definition?.id}}</td>
+            <td>{{logs?.definition?.name}}</td> -->
+            <td> <img alt="Image result for key vaults svg images" style="width:25px;height:25px;" class="mr-2"
+              src="../../assets/images/logs.png">
+              &nbsp;{{logs?.id}}</td>
+          <td>{{logs?.reason}}</td>
+          <td>{{logs.sourceBranch}}</td>
+          <td>{{logs.finishTime}}</td>
+          <td>
+           
+            <button class="btn btn-outline-primary "
+            matTooltip="build log" matTooltipPosition="above"
+              (click)="getIDlogs(logs)" >
+            Get Build Logs
+              
+            </button>
+            </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- <p *ngIf="displayEmptyRow" class="text-center font-italic">No Key Vault is present in this resource group</p> -->
+  </div>
+</div>
+
+<div class="container-fluid" *ngIf="enablebuildlog" >
+  <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-fall" [fullScreen]="true">
+    <p class="white"></p>
+  </ngx-spinner>
+  <div class="text-left mt-5 details" style="display:inline">
+      {{org}} | {{sourceProjectName}} | {{pipelinename}} |
+    <div class="sourceId">
+      <h6 class="details"><em>Build Logs</em></h6>
+    </div>
+  </div>
+<div class="div-shadow">
+  <table id="associationTable" class="table table-striped" aria-describedby="list-key-vaults">
+    <thead>
+      <tr>
+        <th id="list-key-vault-name"> ID</th>
+        <!-- <th id="list-key-vault-uri">Type</th> -->
+        <th id="list-key-vault-location">Count</th>
+        <th id="list-key-vault-location">Created </th>
+        <th id="list-key-vault-action">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let logs of associatedbuildlog">
+        <td>
+          <img alt="Image result for key vaults svg images" style="width:25px;height:25px;" class="mr-2"
+          src="../../assets/images/logs.png">
+          &nbsp;
+          {{logs?.id}}</td>
+        <!-- <td>{{logs?.type}}</td> -->
+        <td>{{logs.lineCount}}</td>
+        <td>{{logs?.createdOn}}</td>
+
+        <td>
+         
+          <button class="btn btn-outline-primary "
+          matTooltip="build log" matTooltipPosition="above"
+            (click)="showlogs(logs)" data-toggle="modal" data-target="#addStorageAccountModal"  data-backdrop="static" data-keyboard="false">
+Show Logs            
+          </button>
+          </td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- <p *ngIf="displayEmptyRow" class="text-center font-italic">No Key Vault is present in this resource group</p> -->
+</div>
+</div>
+
+<div class="modal fade tooltips" id="addStorageAccountModal" tabindex="-1" role="dialog" aria-hidden="false"  >
+  <div class="modal-dialog modal-lg " role="document" >
+    <div class="modal-content " >
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Logs</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div style="background-color:black;overflow-y: auto;
+      min-height: 450px;
+      max-height: 550px;" class="modal-body">
+      
+      <!-- <a style="color:white">{{this.logs}}</a> -->
+      <!-- <div style="color:white" [innerHTML]="logs"></div> -->
+    <div *ngFor="let log of logs; let i = index">
+      <a  style="color:white"> {{i+1}} &nbsp;  {{log}}</a>
+    </div>
+    </div>
+    </div>
+  </div>
+</div>

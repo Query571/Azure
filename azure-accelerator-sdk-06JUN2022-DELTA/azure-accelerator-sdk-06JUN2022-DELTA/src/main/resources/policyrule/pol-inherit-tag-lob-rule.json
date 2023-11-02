@@ -1,0 +1,15 @@
+{
+      "if": {
+        "field": "tags['LOB']",
+        "exists": "false"
+      },
+      "then": {
+        "effect": "append",
+        "details": [
+          {
+            "field": "tags['LOB']",
+            "value": "[resourceGroup().tags['LOB']]"
+          }
+        ]
+      }
+}

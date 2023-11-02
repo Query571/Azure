@@ -1,0 +1,124 @@
+version: '3.7'
+services:
+
+  eureka:
+    image: eureka
+    container_name: eureka
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    environment:
+      - port=8761
+    networks:
+      app_net:
+        ipv4_address: 172.30.0.5
+    restart: always
+
+  sdk:
+    image: sdk
+    container_name: sdk
+    healthcheck:
+      test: [ "CMD", "curl","-k", "-f", "http://localhost:4001/actuator/health" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    links:
+      - eureka
+    environment:
+      - port=4001
+      - token=${token}
+      - vault=${vault}
+    env_file:
+      - .env
+    restart: always
+    depends_on:
+      eureka:
+        condition: service_healthy
+    networks:
+      app_net:
+        ipv4_address: 172.30.0.2
+    volumes:
+      - type: volume
+        source: java-data
+        target: /var/www/html/download/
+      - /opt/azx/logs:/var/log/apt
+      - /opt/logs/log4j2.properties:/opt/logs/log4j2.properties
+ 
+  login:
+    image: login
+    container_name: login
+    links:
+      - eureka
+    environment:
+      - port=4002
+      - token=${token}
+      - vault=${vault}
+    env_file:
+      - .env
+    restart: always
+    networks:
+      app_net:
+        ipv4_address: 172.30.0.3
+    depends_on:
+      sdk:
+        condition: service_healthy
+      eureka:
+        condition: service_healthy
+
+  gateway:
+    image: gateway
+    container_name: gateway
+    healthcheck:
+      test: [ "CMD", "curl", "-k","-f", "http://localhost:8762/actuator/health" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    links:
+      - eureka
+    environment:
+      - port=8762
+    restart: always
+    networks:
+      app_net:
+        ipv4_address: 172.30.0.4
+    depends_on:
+      sdk:
+        condition: service_healthy
+      eureka:
+        condition: service_healthy
+
+  angular:
+    image: angular
+    container_name: angular
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - type: volume
+        source: java-data
+        target: /var/www/html/download/
+      - /opt/certificate/azxsslcert.crt:/opt/certificate/azxsslcert.crt
+      - /opt/certificate/azxsslcert.key:/opt/certificate/azxsslcert.key
+      - /opt/certificate/azxsslcert.pass:/opt/certificate/azxsslcert.pass
+      - /var/lib/docker/volumes/docker-compose_java-data/_data/configuration.json:/usr/share/nginx/html/assets/json/configuration.json
+
+    networks:
+      app_net:
+        ipv4_address: 172.30.0.6
+
+networks:
+ app_net:
+  driver: bridge
+  ipam:
+    config:
+     - subnet: 172.30.0.0/24
+       gateway: 172.30.0.1
+
+volumes:
+  java-data:
+    

@@ -1,0 +1,18 @@
+{
+      "if": {
+        "not": {
+          "field": "location",
+          "in": [
+            "eastus2",
+            "eastus",
+            "westus",
+            "westus2",
+            "southcentralus",
+            "brazilsouth"
+          ]
+        }
+      },
+      "then": {
+        "effect": "deny"
+      }
+}

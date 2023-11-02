@@ -1,0 +1,51 @@
+<div class="container-fluid">
+  <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-fall" [fullScreen]="true">
+    <p class="white"> {{loadingMsg}} </p>
+  </ngx-spinner>
+  <div class="text-left  mt-5 details">ASSIGN POLICY |<span class="font-italic"> {{policyName}}</span></div>
+  <div class="row ml-2 mt-5">
+    <form [formGroup]="assignPolicyForm" class="col-sm-12">
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Scope<span class="text-danger">*</span></label>
+        <div class="col-sm-4">
+          <ngx-select-dropdown (change)="selectResourceGroup()" formControlName="resourceGroup" [multiple]="false"
+            [config]="config" [options]="associatedResourceGroup"></ngx-select-dropdown>
+          <button class="btn btn-outline-primary border-0 rg-btn" (click)="addReg()"> Create New</button>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Exclusions:</label>
+        <div class="col-sm-4">
+          <ng-multiselect-dropdown [placeholder]="'Select Resources'" [settings]="resourceDropdown"
+            [data]="dropdownList" [(ngModel)]="selectedItems" formControlName="resourcesList"
+            (onSelect)="onItemSelect($event)" (onSelectAll)="onSelectAll($event)" (onDeSelect)="onItemDeSelect($event)">
+          </ng-multiselect-dropdown>
+        </div>
+      </div>
+      <div *ngIf="stringParam" class="form-group row">
+        <label class="col-sm-2 col-form-label">Parameters<span class="text-danger">*</span></label>
+        <div class="col-sm-4">
+          <ngx-select-dropdown (change)="selectParameters()" formControlName="parameters" [multiple]="false"
+            [config]="paramConfig" [options]="policyParams.paramList"></ngx-select-dropdown>
+        </div>
+      </div>
+      <div *ngIf="arrayParam" class="form-group row">
+        <label class="col-sm-2 col-form-label">Parameters<span class="text-danger">*</span></label>
+        <div class="col-sm-4">
+          <ng-multiselect-dropdown [placeholder]="'Select Parameters'" [settings]="parametersDropdown"
+            [data]="policyParams.paramList" [(ngModel)]="selectedparameterList" formControlName="parameters"
+            (onSelect)="onParamSelect($event)" (onSelectAll)="onSelectAllParam($event)"
+            (onDeSelect)="onParamDeSelect($event)">
+          </ng-multiselect-dropdown>
+        </div>
+      </div>
+      <div class="form-group row">
+        <button class="btn btn-primary ml-2" (click)="assignPolicy()" [disabled]="assignPolicyForm.invalid">Assign</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div *ngIf="showRgModal">
+  <app-resourcegroup-modal (resGrpResponse)="resourceGrpResponse()" (closeModalPopUp)="closeResourceGroupModal()">
+  </app-resourcegroup-modal>
+</div>

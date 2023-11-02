@@ -1,0 +1,323 @@
+<app-session-timeout></app-session-timeout>
+<div *ngIf="isDashboard" appNoRightClick>
+  <nav class="navbar navbar-expand-lg navbar-primary bg-primary fixed-top sticky-top div-shadow" aria-label="Top Navbar">
+    <ul class="navbar-nav">
+      <!-- <li *ngIf="showSidebar" class="nav-item">
+        <button id="sidebarCollapse" class="btn btn-primary nav-link" (click)="toggle()">
+          <i class="fas fa-bars"></i>
+        </button>
+      </li>
+      <li *ngIf="displayControls" class="nav-item">
+        <a [routerLink]="['azure-services']" class="btn btn-primary nav-link text-light custom-link ml-1"><i
+            class="fa fa-home" aria-hidden="true"></i></a>
+      </li> -->
+
+      <img alt="" class="ml-5 mt-0 "  src="../../assets/images/logo.png" style="width: 100px;height: 40px;">
+      <div class="container">
+            <div class="  text-white" style="margin-top: 1.08rem;">
+              <h6>AZX (Azure Accelerator)</h6>
+            </div>
+
+    </div>
+
+    </ul>
+    <ul class="navbar-nav ml-auto user-alignment">
+      <li class="nav-item mt-2 mr-3 text-light">
+        <h6>{{username}}</h6> 
+        
+     </li> 
+      <li *ngIf="sharedService.userRole != 'Operator' && sharedService.userRole != 'Auditor' "  class="nav-item dropdown">
+        <button class="btn btn-primary nav-link dropdown-toggle text-light custom-link" id="navbarDropdown"
+          role="button" data-display="static" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-cog" aria-hidden="true"></i></button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+          <a *ngIf=" sharedService.userRole !='Auditor'" [routerLink]="['onboarding']" class="btn btn-light dropdown-item text-primary">
+            <i class="fa fa-exchange"
+              aria-hidden="true"></i> Manage Subscription</a>
+              <div *ngIf=" sharedService.userRole !='Auditor'" class="dropdown-divider"></div>
+              <!-- <a  [routerLink]="['view-subscription']" class="btn btn-light dropdown-item text-primary">
+                <i class="fa fa-exchange"
+                  aria-hidden="true"></i> View Subscription</a>
+          <div *ngIf=" sharedService.userRole !='Auditor'" class="dropdown-divider"></div> -->
+          <!-- <a class="btn btn-light dropdown-item text-primary" data-toggle="modal" data-target=""><i
+              class="fa fa-window-maximize" aria-hidden="true"></i> Sevice Principle Configuration</a> -->
+          <!-- <div class="dropdown-divider"></div>
+          <a class="btn btn-light dropdown-item text-primary" (click)="logout()"><i class="fas fa-sign-in"
+              aria-hidden="true"></i>
+            Logging</a> -->
+
+           <!-- <div class="dropdown-divider"></div> -->
+            <a [routerLink]="['user-management']" class="btn btn-light dropdown-item text-primary"><i class="fa fa-user-circle"
+              aria-hidden="true"></i> User Administration</a>
+        </div>
+      </li>
+
+      <li class="nav-item dropdown">
+        <button class="btn btn-primary nav-link dropdown-toggle text-light custom-link" id="navbarDropdown"
+          role="button" data-display="static" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+            class="fa fa-user" aria-hidden="true"></i></button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+          <a class="btn btn-light dropdown-item text-primary" data-toggle="modal" data-target="#passwordModal"  data-backdrop="static" data-keyboard="false"><i
+              class="fa fa-key" aria-hidden="true"></i> Change Password</a>
+          <div class="dropdown-divider"></div>
+          <a class="btn btn-light dropdown-item text-primary" (click)="logoutuser()"><i class="fas fa-sign-out-alt"
+              aria-hidden="true"></i>
+            Logout</a>          
+        </div>
+      </li>
+
+      <li class="nav-item dropdown">
+        <button class="btn btn-primary nav-link  text-light custom-link" id="navbarDropdown"
+          role="button" data-display="static" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" (click)="rubookclick();"><i class="fa fa-question-circle" aria-hidden="true"></i></button>
+        <!-- <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+            <a [routerLink]="['document']" class="btn btn-light dropdown-item text-primary">
+            Run Book</a> 
+        </div> -->
+      </li>
+    </ul>
+  </nav>
+</div>
+<div class="wrapper" appNoRightClick style="height:100%;overflow:hidden;padding-left: 90px;">
+  <nav *ngIf="showSidebar" id="sidebar" style="height:100%; overflow:scroll; overflow-x: hidden;top: 0;  position: absolute; left:0;" class="side-bar div-shadow" aria-label="Side Navbar">
+    <ul class="list-unstyled components" style="padding-top: 60px; padding-bottom: 10px;">
+      <li>
+        <a [routerLink]="['azure-services']"><i class="fa fa-home text-primary vn-image" aria-hidden="true"></i>
+          Home</a>
+      </li>
+      <li>
+        <a href="#SaaSsubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <img alt="" class="vn-image"  src="../../assets/images/SaaS.jpg">
+          SaaS
+        </a>
+        <ul class="collapse list-unstyled" id="SaaSsubmenu">
+          <li>
+            <a [routerLink]="['monitor']" (click)="backToTop()">
+              <img alt="" class="vn-image" src="../assets/images/Monitor.svg">
+              Monitor
+            </a>
+          </li>
+          <li>
+            <a [routerLink]="['policy']" (click)="backToTop()">
+              <img alt="" class="vn-image" src="../assets/images/Policy.svg">
+              Policy
+            </a>
+        
+          </li>
+          <!-- <li>
+            <a [routerLink]="['appregistrations']" (click)="backToTop()">
+              <img alt="" class="vn-image" src="../assets/images/App-Registrations.svg">
+              App Reg
+            </a>
+                  </li> -->
+        </ul>
+      </li>
+      <li>
+        <a href="#PaaSsubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <img alt="" class="vn-image"  src="../../assets/images/PaaS.jpg">
+          PaaS
+        </a>
+        <ul class="collapse list-unstyled" id="PaaSsubmenu">
+          <li>
+            <a [routerLink]="['sqldb']">
+              <img alt="" class="vn-image" src="../assets/images/SQL-Database.svg">
+              Sql Database
+            </a>
+          </li>
+          <li>
+            <a [routerLink]="['keyvaults']">
+              <img alt="" class="vn-image" src="../assets/images/Key-Vaults.svg">
+              Key Vaults
+            </a>
+          </li>
+          <li>
+            <a href="#appdeploypageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+              <img alt="" class="vn-image" src="../assets/images/App-Services.svg">
+              App Deploy Services
+            </a>
+            <ul class="collapse list-unstyled" id="appdeploypageSubmenu">
+              <li>
+                <a [routerLink]="['app-services']" (click)="backToTop()">
+                  <img alt="" class="vn-image" src="../assets/images/App-Services.svg">
+                  App Services
+                </a>
+              </li>
+              <li>
+                <a [routerLink]="['upload-config']" (click)="backToTop()">
+                  <img alt="" class="vn-image" src="../assets/images/Deploy-Service.svg">
+                  Deploy Service
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+              <img alt="" class="vn-image" src="../assets/images/container-services.svg">
+              Container Services
+            </a>
+            <ul class="collapse list-unstyled" id="pageSubmenu">
+              <li>
+                <a [routerLink]="['aks-cluster']" (click)="backToTop()">
+                  <img alt="" class="vn-image" src="../assets/images/Kubernetes-Services.svg">
+                  AKS Cluster
+                </a>
+              </li>
+              <li>
+                <a [routerLink]="['container-registries']" (click)="backToTop()">
+                  <img alt="" class="vn-image" src="../assets/images/Container-Registries.svg">
+                  Container Registry
+                </a>
+              </li>
+              <li>
+                <a [routerLink]="['aks-app-deploy']" (click)="backToTop()">
+                  <img alt="" class="vn-image" src="../assets/images/App-Deployment.svg">
+                  App Deploy
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="#IaaSsubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <img alt="" class="vn-image"  src="../../assets/images/SaaS.jpg">
+         IaaS
+        </a>
+        <ul class="collapse list-unstyled" id="IaaSsubmenu">
+          <li>
+            <a href="#virtualnetworkSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+              <img alt="" class="vn-image" src="../assets/images/Virtual-Networks.svg">
+              Virtual Network
+            </a>
+            <ul class="collapse list-unstyled" id="virtualnetworkSubmenu">
+              <li>
+                <a [routerLink]="['vnet']" (click)="backToTop()">
+                  <img alt="" class="vn-image" src="../assets/images/Virtual-Networks.svg">
+                  Virtual Network
+                </a>
+              </li>
+              <li>
+                <a [routerLink]="['nsg']" (click)="backToTop()">
+                  <img alt="" class="vn-image" src="../assets/images/nsg.png">
+                  Network Security Group
+                </a>
+
+              </li>
+
+            </ul>
+          </li>
+        
+          <li>
+            <a [routerLink]="['storageacc']">
+              <img alt="" class="vn-image" src="../assets/images/Storage-Accounts.svg">
+              Storage Account
+            </a>
+          </li>
+
+      <li>
+        <a [routerLink]="['virtual-machine']" (click)="backToTop()">
+          <img alt="" class="vn-image" src="../assets/images/Virtual-machine.png">
+          Virtual machine
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['template']">
+          <img alt="" class="vn-image" src="../../assets/images/armlogo.png">
+          ARM Template</a>
+      </li>
+        </ul>
+      </li>
+      <li>
+        <a [routerLink]="['devops']"><img alt="" class="vn-image" src="../../assets/images/devops.png">
+          Azure DevOps</a>
+      </li>
+    </ul>
+  </nav>
+  <div id="content" style="height:100%;overflow:auto">
+    <p-toast position="top-right"></p-toast>
+    <router-outlet (window:beforeunload)="doBeforeUnload()" (window:unload)="doUnload()"></router-outlet>
+  </div>
+</div>
+<div class="modal fade" id="passwordModal" appNoRightClick>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">CHANGE PASSWORD</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="changePasswordForm">
+          <div class="form-group row justify-content-center">
+            <label class="col-sm-5 col-form-label font-weight-bold">Old Password:</label>
+            <div class="input-group col-sm-6">
+              <input [type]="oldFieldTextType ? 'text' : 'password'" class="form-control" formControlName="oldPassword"
+              placeholder="Enter Old Password" maxlength="32" minlength="4" />
+              <div class="input-group-append">
+                <span class="input-group-text">
+                  <i class="fa" [ngClass]="{'fa-eye-slash': !oldFieldTextType,
+                  'fa-eye': oldFieldTextType}" (click)="toggleOldFieldTextType()" aria-hidden="true">
+                  </i>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row justify-content-center">
+            <label class="col-sm-5 col-form-label font-weight-bold">New Password:</label>
+            <div class="input-group col-sm-6">
+              <input [type]="newFieldTextType ? 'text' : 'password'" class="form-control" formControlName="newPassword"
+                placeholder="Enter New Password" maxlength="32" minlength="4" />
+              <div class="input-group-append">
+                <span class="input-group-text">
+                  <i class="fa" [ngClass]="{'fa-eye-slash': !newFieldTextType,
+                  'fa-eye': newFieldTextType}" (click)="toggleNewFieldTextType()" aria-hidden="true">
+                  </i>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row justify-content-center">
+            <label class="col-sm-5 col-form-label font-weight-bold">Confirm Password:</label>
+            <div class="input-group  col-sm-6">
+              <input [type]="confirmFieldTextType ? 'text' : 'password'" class="form-control"
+                formControlName="confirmPassword" placeholder="Re-enter New Password" maxlength="32" minlength="4"/>
+              <div class="input-group-append">
+                <span class="input-group-text">
+                  <i class="fa" [ngClass]="{'fa-eye-slash': !confirmFieldTextType,
+                    'fa-eye': confirmFieldTextType}" (click)="toggleConfirmFieldTextType()" aria-hidden="true">
+                  </i>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row justify-content-center">
+            <label class="col-sm-5 col-form-label"></label>
+            <p class="text-danger col-sm-6"
+              *ngIf="(changePasswordFormControl.confirmPassword.valid) && (changePasswordFormControl.confirmPassword.value !== changePasswordFormControl.newPassword.value)">
+              <small>Password doesn't match <i class="fa fa-exclamation-circle" aria-hidden="true"></i></small>
+            </p>
+            <p class="text-danger col-sm-6" *ngIf="(changePasswordFormControl.newPassword.errors?.minlength)">
+              <small>Password should be minimum of 8 characters <i class="fa fa-exclamation-circle"
+                  aria-hidden="true"></i></small>
+            </p>
+            <p class="text-success col-sm-6"
+              *ngIf="(changePasswordFormControl.confirmPassword.valid)&&(changePasswordFormControl.confirmPassword.value === changePasswordFormControl.newPassword.value)">
+              <small>Password matched <i class="fa fa-check-circle" aria-hidden="true"></i></small>
+            </p>
+            <p class="text-danger col-sm-6"
+            *ngIf="(changePasswordFormControl.oldPassword.value != '') && (changePasswordFormControl.oldPassword.value == changePasswordFormControl.newPassword.value)">
+            <small>Old password and new password should not be same <i class="fa fa-exclamation-circle"
+              aria-hidden="true"></i> </small>
+          </p>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="changePassword()"
+          [disabled]="(changePasswordForm.invalid) ||
+          (changePasswordFormControl.confirmPassword.value !== changePasswordFormControl.newPassword.value)">Confirm</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="cancel()" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

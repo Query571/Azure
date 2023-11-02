@@ -1,0 +1,133 @@
+<div class="container-fluid">
+    <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-fall" [fullScreen]="true">
+      <p class="white">{{ loadingMsg }}</p>
+    </ngx-spinner>
+    <div class="text-left mt-5 details">
+      {{sourceKeyVault}} |
+      <div class="sourceId">
+        <h6 class="details"><em>Certificate</em></h6>
+      </div>
+    </div>
+    <div *ngIf="showNew" class="row azx-service-forms">
+        <span class="col-sm-2">
+          <button class="btn btn-outline-primary w-100" (click)="displayForms()" [disabled]="disableNew || sharedService.userRole =='Auditor'">
+            <i class="fa fa-plus pr-1" aria-hidden="true"></i>New
+          </button>
+        </span>
+        <span class="col-sm-2">
+          <button class="btn btn-outline-primary w-100" (click)="refresh()">
+            <i class="fas fa-sync-alt pr-1" aria-hidden="true"></i>Reload
+          </button>
+        </span>    
+      </div>
+      <div *ngIf="enableAddSecretsForm" class="row ml-2 mt-5">
+        <form [formGroup]="KeysForm" class="col-sm-12">
+         
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Source Key Vault:</label>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" formControlName="sourcekeyvault" [(ngModel)]="sourceKeyVaultName" disabled />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Certificate Name:
+              <button class="btn  border-0 ml-0  bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+              matTooltip=" Certificate names can only contain alphanumeric characters and dashes."
+               matTooltipPosition="above" >
+               <i class="fal fa-info-circle"></i></button>
+            </label>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" formControlName="certificateName" maxlength="32" minlength="2" (ngModelChange)="certificateChange()" />
+              <span class="text-danger" *ngIf="invalidCerName">
+                <small>{{invalidCertificateErrMsg}}</small>
+              </span>
+              <span class="text-danger"
+              *ngIf="certificateFormControl.certificateName.errors?.pattern">
+             <small> It should contain only alphanumeric characters and dashes. </small>
+           </span>
+
+              <span class="text-danger"
+              *ngIf="certificateFormControl.certificateName.errors?.minlength || certificateFormControl.certificateName.errors?.maxlength">
+             <small> It must be 2 to 32 characters long. </small>
+           </span>
+
+            </div>
+          </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Subject :
+              <button class="btn  border-0 ml-0  bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+              matTooltip="The X.500 distinguished name."
+               matTooltipPosition="above" >
+               <i class="fal fa-info-circle"></i></button>
+            </label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" formControlName="subject" maxlength="32" minlength="2" placeholder="For example:'CN=mydomain.com'. " (ngModelChange)="certificatevalidation()" />
+                <small class="text-danger" >{{validationstring}}</small> 
+
+                <span class="text-danger"
+                *ngIf="certificateFormControl.subject.errors?.minlength || certificateFormControl.subject.errors?.maxlength">
+               <small>It must be 2 to 32 characters long.</small>
+             </span>
+            </div>
+        </div>
+       
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Issuer:
+              <button class="btn  border-0 ml-0  bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+              matTooltip="Integrated CAs are managed by key vault, which include: DigiCert,GlobalSign."
+               matTooltipPosition="above" >
+               <i class="fal fa-info-circle"></i></button>
+            </label>
+            <span class="col-sm-3">
+              <ngx-select-dropdown formControlName="issuer" [multiple]="false" [config]="config"
+                [options]="listofIssuer"></ngx-select-dropdown>
+            </span>
+          </div>
+          <div class="form-group row">
+            <span class="col-sm-1">
+              <button class="btn btn-primary w-100" (click)="AddCertificate()" [disabled]="KeysForm.invalid || invalidCerName">
+                Add
+              </button>
+            </span>
+            <span class="col-sm-1">
+              <button class="btn btn-outline-secondary w-100" (click)="cancel()">
+                Cancel
+              </button>
+            </span>
+          </div>
+        </form>
+      </div>
+      <div *ngIf="displayTable" class="mt-5 div-shadow">
+        <table id="associationTable" class="table table-striped" aria-describedby="list-peered-vnets">
+          <thead>
+            <tr>
+              <th id="list-peering-name">Name</th>
+              <th id="list-peering-peers">ID </th>
+              <th id="list-peering-action">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let keys of listofCertificate">
+              <td>
+                <button style="color: blue;" class="border-0"><i class="fa fa-id-card" aria-hidden="true"></i></button>
+                &nbsp;
+                {{ keys.certificateName }}</td>
+             
+              <td>{{ keys.certificateId }}</td>
+              <!-- <td>{{ keys.remoteNetwokName }}</td> -->
+              <td>
+                <!-- <button class="btn btn-outline-dark mr-2 border-0" (click)="onClickEditButton(vnet)">
+                  <i class="fa fa-edit" aria-hidden="true"></i>
+                </button> -->
+                <button class="btn btn-outline-danger border-0"
+                  (click)="delete(keys)" [disabled]="sharedService.userRole =='Auditor'">
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    
+    
+  </div>

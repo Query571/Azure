@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/azure-accelerator-sdk-06JUN2022-DELTA/AzureAccelerator-Java.iml" filepath="$PROJECT_DIR$/azure-accelerator-sdk-06JUN2022-DELTA/AzureAccelerator-Java.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/azure-accelerator-sdk-06JUN2022-DELTA.iml" filepath="$PROJECT_DIR$/.idea/azure-accelerator-sdk-06JUN2022-DELTA.iml" />
+    </modules>
+  </component>
+</project>

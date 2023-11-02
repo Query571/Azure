@@ -1,0 +1,17 @@
+{
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Resources/saz_solutionscriptions/resourceGroup"
+          },
+          {
+            "field": "tags['Engagement']",
+            "exists": "false"
+          }
+        ]
+      },
+      "then": {
+        "effect": "deny"
+      }
+}

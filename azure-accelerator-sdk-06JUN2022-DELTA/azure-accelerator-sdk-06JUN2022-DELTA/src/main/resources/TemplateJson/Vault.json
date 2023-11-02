@@ -1,0 +1,90 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vaultName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the key vault Prefix."
+      }
+    },
+
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "The location of the resources"
+      }
+    },
+    "skuName": {
+      "type": "string",
+      "defaultValue": "standard",
+      "allowedValues": [
+        "standard",
+        "premium"
+      ],
+      "metadata": {
+        "description": "The SKU of the vault to be created."
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2021-11-01-preview",
+      "name": "[concat(parameters('vaultName'),'-',copyIndex())]",
+      "location": "[parameters('location')]",
+      "copy": {
+        "name": "storagecopy",
+        "count": 1
+      },
+      "properties": {
+        "sku": {
+          "family": "A",
+          "name": "standard"
+        },
+        "tenantId": "",
+        "accessPolicies": [
+          {
+            "tenantId": "",
+            "objectId": "",
+            "permissions": {
+              "keys": [
+                "get",
+                "list",
+                "update",
+                "create",
+                "import",
+                "delete"
+              ],
+              "secrets": [
+                "get",
+                "list",
+                "set",
+                "delete"
+              ],
+              "certificates": [
+                "get",
+                "list",
+                "update",
+                "create",
+                "import",
+                "delete",
+                "listissuers",
+                "getissuers",
+                "setissuers",
+                "manageissuers"
+              ]
+            }
+          }
+        ],
+        "enabledForDeployment": false,
+        "provisioningState": "Succeeded",
+        "publicNetworkAccess": "Enabled"
+      }
+    }
+  ],
+  "outputs": {
+
+  }
+}

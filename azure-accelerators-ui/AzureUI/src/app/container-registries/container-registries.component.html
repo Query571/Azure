@@ -1,0 +1,413 @@
+<style>
+  .modal-lg {
+  max-width: 42%;
+}
+</style>
+
+<div class="container-fluid">
+  <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-fall" [fullScreen]="true"
+    name="fullSpinner">
+    <p class="white"> {{loadingMsg}} </p>
+  </ngx-spinner>
+  <div class="text-left  mt-5 details">Container registry details</div>
+  <form [formGroup]="ContainerRegistryForm">
+    <div class="form-group">
+      <span>
+        <label class="mt-3 col-3 col-form-label pl-0">Resource Group</label>
+      </span>
+      <div class="row azx-service-forms mt-0">
+        <span class="col-sm-3 pl-0">
+          <ngx-select-dropdown (change)="selectResourceGroup()" formControlName="resourceGroup" [multiple]="false"
+            [config]="config" [options]="associatedResourceGroup"></ngx-select-dropdown>
+          <button class="btn btn-outline-primary border-0 rg-btn" (click)="addReg()" [disabled]="sharedService.userRole =='Auditor'"> Create New</button>
+        </span>
+        <span class="col-sm-2">
+          <button class="btn btn-outline-primary w-100" data-toggle="modal" data-target="#CreateRegistryModal" data-backdrop="static" data-keyboard="false" (click)="createRegi()"
+            [disabled]="disableAddbtn || sharedService.userRole =='Auditor'"><i class="fa fa-plus" aria-hidden="true"></i> REGISTRY</button>
+        </span>
+      </div>
+    </div>
+  </form>
+  <div >
+    <h6 style="display: inline;">. </h6><a style="float: right;"> {{refreshTime}}&nbsp;&nbsp; <i style="color: #007bff;cursor: pointer;margin-right: 20px;" (click)="onRefreshClick()"  class="fas fa-sync-alt" > </i></a>
+  </div>
+  <div>
+    <div class="div-shadow">
+      <table id="associationTable" class="table table-striped" aria-describedby="list-registries">
+        <thead>
+          <tr>
+            <th id="list-container-reg-name">Name</th>
+            <th id="list-container-reg-server">Login Server</th>
+            <th id="list-container-reg-location">Location</th>
+            <th id="list-container-reg-creation">Creation Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let registry of listOfRegistries">
+            <td>
+              <img alt="Image result for app services svg images" style="width:25px;height:25px;" class="mr-2"
+              src="../../assets/images/Container-Registries.svg">
+              &nbsp;
+              {{registry.name}}
+              <button class="btn btn-outline-dark ml-1 border-0" matTooltip="Repository Details"
+                matTooltipPosition="above" (click)="showRepoDetails(registry)" data-toggle="modal"  data-backdrop="static" data-keyboard="false"
+                data-target="#repositoryModal" >
+                <i class="fa fa-info-circle" aria-hidden="true"></i></button>
+            </td>
+            <td>{{registry.loginServerUrl}}</td>
+            <td>{{registry.location}}</td>
+            <td>{{registry.creationDate}}</td>
+            <td>
+              <button class="btn btn-outline-danger border-0" (click)="deleteacr(registry)" matTooltip="Delete"
+              [disabled]="sharedService.userRole =='Auditor'"
+              matTooltipPosition="above"><i
+                class="fa fa-trash" aria-hidden="true"></i></button>
+                &nbsp;<button ctype="button" class="btn btn-outline-primary"  (click)="importImages(registry)"
+              data-toggle="modal" data-target="#importimages"  data-backdrop="static" data-keyboard="false" [disabled]="sharedService.userRole =='Auditor'"> Import Images
+              </button>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p *ngIf="displayEmptyRow" class="text-center font-italic">No Container Registry is present in this resource group
+      </p>
+    </div>
+  </div>
+  <div class="modal fade tooltips" id="CreateRegistryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="false">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Enter Container Registry Details</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="createRegistryForm">
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label ">Name:
+                
+              </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" formControlName="registryName" maxlength="50" minlength="5" placeholder="Registry Name"
+                (keypress)="keyPressAlphanumeric($event)"  (ngModelChange)="isUnique($event)" >
+                <a style="float: right;color: gray;font-size:small;">.azurecr.io</a><br>
+              <span class="text-danger" *ngIf="(registryCreationFormControl.registryName.touched) &&
+              registryCreationFormControl.registryName.errors?.required">
+                <small>Registry Name should not be empty </small>
+              </span>
+              <span class="text-danger"
+              *ngIf="registryCreationFormControl.registryName.errors?.minlength || registryCreationFormControl.registryName.errors?.maxlength">
+              <small>Registry Name may contain alpha numeric characters only and must be between 5 and 50 characters long. </small>
+            </span>
+            <span class="text-danger" *ngIf="invalidregistryName">
+              <small>{{uniqueNameErrMsg}}</small>
+            </span>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">Resource Group:
+                <button class="btn  border-0 ml-0 bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+              matTooltip="A resource group is a collection of resources that share the same lifecycle, permissions, and policies."
+               matTooltipPosition="above" >
+               <i class="fal fa-info-circle"></i></button>
+              </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" [(value)]="resourceGroupName" formControlName="resourceGroup">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">Region:
+                <button class="btn  border-0 ml-0  bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+                matTooltip="Choose the Azure region that's right for you and your customers. Not all VM sizes are available in all regions."
+                 matTooltipPosition="above" >
+                 <i class="fal fa-info-circle"></i></button>
+
+              </label>
+              <div class="col-sm-8">
+                <ngx-select-dropdown (change)="selectLocation()" formControlName="location" [multiple]="false"
+                  [config]="locationConfig" [options]="associatedLocations"></ngx-select-dropdown>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">SKU:
+
+                <button class="btn  border-0  bg-transparent ml-0  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+                matTooltip="All SKUs provide the same programmatic capabilities. Choosing a higher SKU will provide more performance and scale." matTooltipClass="popups"
+                 matTooltipPosition="above" >
+                 <i class="fal fa-info-circle"></i>
+                </button>
+              </label>
+              
+              <div class="col-sm-8">
+                <ngx-select-dropdown (change)="selectSize()" formControlName="size" [multiple]="false"
+                  [config]="sizeconfig" [options]="associatedSize"></ngx-select-dropdown>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="createRegistry()"
+            [disabled]="createRegistryForm.invalid">Create</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal fade" id="repositoryModal" tabindex="-1" role="dialog" aria-hidden="false">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="width:fit-content">
+        <div class="modal-header">
+          <h5>Repositories</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="min-width:50rem;max-width:fit-content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-12">
+                <ngx-spinner bdColor="#fff" size="medium" color="#0275d8" type="ball-elastic-dots" [fullScreen]="false"
+                  name="modalSpinner">
+                </ngx-spinner>
+                <div *ngIf="isRepoEmpty">
+                  <em>No repository available!</em>
+                </div>
+                <ol>
+                  <li *ngFor="let rep of repositoryList;let j = index" style="display: flex;justify-content: space-between;">
+                  
+                    <div>{{j+1}}.{{rep.name}}: &nbsp;
+                      
+                        <a *ngIf="rep.load" class="black"> Loading tags.... </a>
+                      <ng-container *ngIf="rep.showtag">
+                        <span *ngFor="let tags of rep.tag;let i = index">
+                  
+                           {{tags}}<a *ngIf="i!=rep.tag.length-1">,</a>
+                        </span>
+                      </ng-container>
+                    </div>
+                    <span>
+                      <button class="btn btn-outline-primary border-0 rg-btn" (click)="showtag(rep,j)">
+                       <a *ngIf="!rep.showtag"> Show Tags</a>
+                       <a *ngIf="rep.showtag"> Hide Tags</a>
+                      </button>
+                      <i style="color:#dc3545;cursor: pointer;" class="fas fa-trash" aria-hidden="true" (click)="delete(rep)">
+                      </i>
+                    </span>
+                  
+                  </li>
+
+                </ol>
+               
+                <!-- <div class="border border-dark">
+                  <table id="associationTable" class="table table-striped" aria-describedby="list-subnets-modal">
+                    <thead>
+                      <tr>
+                        <th id="list-subnet-modal-no">Name</th>
+                        <th id="list-subnet-modal-name">Tags</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let rep of repositoryList; let i = index">
+                        <td>{{rep.imageName}}</td>
+                        <td><span *ngFor="let tags of rep.tag;let i = index">{{tags}}<a *ngIf="rep.tag.length>1 && i!=rep.tag.length-1">,</a> </span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div> -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="showRgModal">
+  <app-resourcegroup-modal (resGrpResponse)="resourceGrpResponse()" (closeModalPopUp)="closeResourceGroupModal()">
+  </app-resourcegroup-modal>
+</div>
+<div class="modal fade tooltips" id="importimages" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1"
+aria-hidden="false">
+<div class="modal-dialog modal-lg" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel1">Import Container Images</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Import Type:</label>
+        <div class="col-sm-8">
+      <label *ngFor="let radio of radioType;">
+        <input
+          type="radio"
+          name="radioType"
+          [value]="radio.id"
+          [(ngModel)]="radioSelected"
+          (change)="onChangeEvent(radio)"
+
+        />
+        {{radio.name}} &nbsp;
+      </label>
+      <!-- <button class="btn btn-outline-dark ml-1 border-0" matTooltip=""
+      matTooltipPosition="above" 
+     >
+      <i class="fa fa-info-circle" aria-hidden="true"></i></button> -->
+
+        </div>
+    
+      <label class="col-sm-12 col-form-label" *ngIf="dockerImageFlag"  style="color: blue;"><i class="fa fa-info-circle" aria-hidden="true"></i> &nbsp; Below is the list of  25 Best official Docker Hub Images</label>
+      <!-- <label class="col-sm-12 col-form-label" *ngIf="loginflag"  style="color: blue;"><i class="fa fa-info-circle" aria-hidden="true"></i> &nbsp; Can only login with Pro or Team account</label> -->
+      </div>
+     
+     
+      <ng-container *ngIf="acrImageFlag" >
+        <form [formGroup]="importACRForm">
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Resource Group:
+
+              <button class="btn  border-0 ml-0 bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+              matTooltip="A resource group is a collection of resources that share the same lifecycle, permissions, and policies."
+               matTooltipPosition="above" >
+               <i class="fal fa-info-circle"></i></button>
+            </label>
+
+          <div class="col-sm-8">
+            <ngx-select-dropdown (change)="selectDestiResourceGroup()" formControlName="destiresourceGroup" [multiple]="false"
+              [config]="resconfig" [options]="associatedResourceGroup"></ngx-select-dropdown>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label">ACR Name:</label>
+
+          <div class="col-sm-8">
+            <ngx-select-dropdown (change)="selectDestiacr($event)" formControlName="destinationACR" [multiple]="false"
+              [config]="acrconfig" [options]="destinationAcr"></ngx-select-dropdown>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label">ACR Image:</label>
+
+          <div class="col-sm-8">
+              <ngx-select-dropdown  (change)="selectACRimage($event)" formControlName="acrimage" [multiple]="false"
+              [config]="config1" [options]="acrimageList"></ngx-select-dropdown>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Tags:</label>
+
+          <div class="col-sm-8">
+              <ngx-select-dropdown  formControlName="acrtags" [multiple]="false"
+              [config]="tagconfig" [options]="acrtagsList"></ngx-select-dropdown>
+            </div>
+          </div>
+
+
+
+        </form>
+      </ng-container>
+    <ng-container *ngIf="dockerImageFlag">
+      <form  [formGroup]="importDockerForm">
+
+        <div class="form-group row">
+          <label class="col-sm-4 col-form-label">Docker Official Image:</label>
+
+        <div class="col-sm-8">
+            <ngx-select-dropdown formControlName="dockerimage" [multiple]="false"
+            [config]="dockerconfig" [options]="dockerImageList"  (change)="selectDockerimage($event)"></ngx-select-dropdown>
+          </div>
+        </div>
+          <div class="form-group row">
+          <label class="col-sm-4 col-form-label">Tags:</label>
+          <div class="col-sm-8">
+          <!-- <input type="text" class="form-control" formControlName="tags"> -->
+          <ngx-select-dropdown  formControlName="tags" [multiple]="false" (change)="selectDockerimagetag($event)"
+          [config]="dockerimagetagconfig" [options]="dockerimagetagsList"></ngx-select-dropdown>
+          </div>
+        </div>
+      
+      </form>
+    </ng-container>
+
+    <ng-container *ngIf="loginflag">
+      <form  [formGroup]="logindockerForm"  autocomplete="off">
+          <div class="form-group row" [hidden] ="!isShow">
+              <label class="col-sm-4 col-form-label">Username:</label>
+              <div class="col-sm-8">
+              <input type="text"class="form-control" formControlName="username" placeholder="Username"
+              [(ngModel)]="logindockerForm.username" required>
+          </div>  
+          </div> 
+          <div class="form-group row" [hidden] ="!isShow">
+              <label class="col-sm-4 col-form-label">Password:</label>
+              <div class="col-sm-8">
+               <input type="password"class="form-control" formControlName="password" placeholder="password "
+                [(ngModel)]="logindockerForm.password" required appBlockCopyPaste> 
+              
+          </div>  
+          </div>
+
+                      
+      </form>
+      <form  [formGroup]="usernmaespaceForm"  autocomplete="off">
+        <div class="form-group row" [hidden] ="isShow">
+          <label class="col-sm-4 col-form-label">Repository:</label>
+
+          <div class="col-sm-8">  
+            <ngx-select-dropdown formControlName="repositoryname" [multiple]="false"
+            [config]="dockerprivateconfig" [options]="repoprivatelist" (change)="repositoryselection($event.target)"></ngx-select-dropdown>          
+      </div>  
+      </div>   
+      </form> 
+
+      <!-- docker images  -->
+
+    <form  [formGroup]="privatedockerimageForm"  autocomplete="off">
+
+        <div class="form-group row" [hidden] ="isdisplay" >
+       
+          <label class="col-sm-4 col-form-label">Docker Image:</label>
+          <div class="col-sm-8">  
+            <ngx-select-dropdown formControlName="privatedockerimg" [multiple]="false"
+            [config]="dockerprivateconfigimg" (change)="privatedocimg()" [options]="imageprivatelist"></ngx-select-dropdown>          
+      </div>  
+      </div>  
+
+      <div class="form-group row" [hidden] ="isdisplay">
+        <label class="col-sm-4 col-form-label">Tags:</label>
+        <div class="col-sm-8">  
+          <ngx-select-dropdown formControlName="privatedockertag" [multiple]="false"
+          [config]="dockerprivateconfigtags" [options]="tagsprivatelist" ></ngx-select-dropdown>          
+    </div>  
+    </div>   
+      </form>
+
+  </ng-container>
+
+    </div>
+    <div class="modal-footer">
+      <button *ngIf="acrImageFlag" type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="import()"   [disabled]="importACRForm.invalid"
+        >Import</button>
+        <button *ngIf="dockerImageFlag" type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="import()"   [disabled]="importDockerForm.invalid"
+        >Import</button>
+         <button *ngIf="loginflag" type="button" class="btn btn-outline-primary"  data-backdrop="static" data-keyboard="false" (click)="import()" [hidden] ="!isShow" [disabled]="logindockerForm.invalid"
+        >Login</button>
+        <button *ngIf="loginflag" type="button" class="btn btn-outline-primary"  data-backdrop="static" data-keyboard="false" [hidden] ="isShow" data-dismiss="modal" (click)="imporprivatetdockerimage()"
+>Import</button> 
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+          
+

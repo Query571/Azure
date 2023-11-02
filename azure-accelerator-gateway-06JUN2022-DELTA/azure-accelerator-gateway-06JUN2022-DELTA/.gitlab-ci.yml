@@ -1,0 +1,97 @@
+stages:
+  - build
+  - deploy
+
+maven_build_demo_bkp_image:
+ stage: build
+ tags:
+   - demo_bkp_image
+ only:
+   - 06JUN2022-DELTA
+ script:
+   - sudo chown -R gitlab-runner:gitlab-runner /home/gitlab-runner/
+   - sudo chmod 777 docker.sh && sudo ./docker.sh
+   - sudo rm -rf target
+
+
+maven_build_demo_bkp_clone:
+ stage: build
+ tags:
+   - demo_bkp_clone
+ only:
+   - 06JUN2022-DELTA
+ script:
+   - sudo chown -R gitlab-runner:gitlab-runner /home/gitlab-runner/
+   - sudo chmod 777 docker.sh && sudo ./docker.sh
+   - sudo rm -rf target
+
+maven_build_demo_bkp:
+ stage: build
+ tags:
+   - demo_bkp
+ only:
+   - 06JUN2022-DELTA
+ script:
+   - sudo chown -R gitlab-runner:gitlab-runner /home/gitlab-runner/
+   - sudo chmod 777 docker.sh && sudo ./docker.sh
+   - sudo rm -rf target
+
+
+maven_build_demo:
+  stage: build
+  tags:
+    - demo
+  only:
+    - xor-azx-demo-gateway
+  script:
+    - sudo chown -R gitlab-runner:gitlab-runner /home/gitlab-runner/
+    - sudo chmod 777 docker.sh && sudo ./docker.sh
+    - sudo rm -rf target
+
+demo_bkp_image_deploy:
+ stage: deploy
+ tags:
+   - demo_bkp_image
+ only:
+   - 06JUN2022-DELTA
+ needs:
+   - maven_build_demo_bkp_image
+ when: manual
+ script:
+   - sudo chmod 777 /opt/docker-compose/up.sh && sudo /opt/docker-compose/up.sh
+
+demo_bkp_clone_deploy:
+ stage: deploy
+ tags:
+   - demo_bkp_clone
+ only:
+   - 06JUN2022-DELTA
+ needs:
+   - maven_build_demo_bkp_clone
+ when: manual
+ script:
+   - sudo chmod 777 /opt/docker-compose/up.sh && sudo /opt/docker-compose/up.sh
+
+demo_bkp_deploy:
+ stage: deploy
+ tags:
+   - demo_bkp
+ only:
+   - 06JUN2022-DELTA
+ needs:
+   - maven_build_demo_bkp
+ when: manual
+ script:
+   - sudo chmod 777 /opt/docker-compose/up.sh && sudo /opt/docker-compose/up.sh
+
+demo_deploy:
+  stage: deploy
+  tags:
+    - demo
+  only:
+    - xor-azx-demo-gateway
+  needs:
+    - maven_build_demo
+  when: manual
+  script:
+    - sudo chmod 777 /opt/docker-compose/up.sh && sudo /opt/docker-compose/up.sh

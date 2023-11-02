@@ -1,0 +1,49 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-fall" [fullScreen]="true">
+    <p class="white"> {{loadingMsg}} </p>
+  </ngx-spinner>
+  
+  <div class="page-right pageHeight">
+    <div class="container-fluid">
+        <div style="margin-left:3rem" class="mt-5 details">ARM TEMPLATE</div>
+
+      <div class="tab-pane" id="template">
+        <form [formGroup]="ARMTemplateForm">
+          
+          <div class="form-group row content-spacing">
+            <div class="col-10 pt-5">
+              <div class="mt-2">
+                <div>
+                  <div class="row form-group">
+                    <span class="col-3 label-text">Resources</span>
+                    <span class="col-6"> <ngx-select-dropdown (change)="selectResource()" formControlName="resource" [multiple]="false"
+                        [config]="config" [options]="associatedResource"></ngx-select-dropdown></span>
+                  </div>
+                  <div class="row form-group">
+                    <span class="col-3 label-text">Count</span>
+                    <span class="col-6">
+                      <input class="form-control" type="text" formControlName="count" minlength="1" maxlength="1" (keypress)="keyPressAlphanumeric($event)">
+                             
+                  <span class="text-danger"
+                  *ngIf="ARMTemplateFormControl.count.errors?.min ||ARMTemplateFormControl.count.errors?.max ">
+                  <small>Count must be between 1 and 5 </small>
+                </span>
+                    </span>
+             
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="text-right col-8 mb-5">
+              <button class="btn btn-outline-primary col-2 mr-2" (click)="downloadtemplate()" 
+              [disabled]="ARMTemplateForm.invalid || sharedService.userRole =='Auditor'"
+                 >Download</button>
+                <button class="btn btn-secondary col-2" (click)="cancel()">Reset</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,31 @@
+{
+    "if": {
+        "allOf": [
+          {
+            "field": "Microsoft.Network/networkSecurityGroups/securityRules/direction",
+            "equals": "inbound"
+          },
+          {
+            "field": "Microsoft.Network/networkSecurityGroups/securityRules/access",
+            "equals": "Allow"
+          },
+          {
+            "field": "Microsoft.Network/networkSecurityGroups/securityRules/sourceAddressPrefixes",
+            "notEquals": ""
+          },
+          {
+            "count": {
+              "field": "Microsoft.Network/networkSecurityGroups/securityRules/sourceAddressPrefixes[*]",
+              "where": {
+                "value": "[last(split(first(field('Microsoft.Network/networkSecurityGroups/securityRules/sourceAddressPrefixes[*]')), '/'))]",
+                "less": "22"
+              }
+            },
+            "greaterOrEquals": 1
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+ }

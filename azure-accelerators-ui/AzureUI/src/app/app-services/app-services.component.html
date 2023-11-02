@@ -1,0 +1,73 @@
+<div class="container-fluid">
+  <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-fall" [fullScreen]="true">
+    <p class="white"> {{loadingMsg}} </p>
+  </ngx-spinner>
+  <div class="text-left  mt-5 details">App Services details</div>
+  <form [formGroup]="appServicesForm">
+    <div class="form-group">
+      <span>
+        <label class="mt-3 col-3 col-form-label pl-0">Resource Group</label>
+      </span>
+      <div class="row azx-service-forms mt-0">
+        <span class="col-sm-3 pl-0">
+          <ngx-select-dropdown (change)="selectResourceGroup()" formControlName="resourceGroup" [multiple]="false"
+            [config]="config" [options]="associatedResourceGroup"></ngx-select-dropdown>
+          <button *ngIf="sharedService.userRole !='Auditor'" class="btn btn-outline-primary border-0 rg-btn" (click)="addReg()" [disabled]="sharedService.userRole =='Auditor'"> Create New</button>
+        </span>
+      </div>
+    </div>
+  </form>
+  <div>
+    <div class="col-sm-10 pl-0">
+      <strong>{{displayName}}</strong>
+      <button *ngIf="sharedService.userRole !='Auditor'" class="btn btn-outline-primary add-btn" (click)="startApp()" [disabled]="disableStart || sharedService.userRole =='Auditor'"><i
+          class="fa fa-play" aria-hidden="true"> Start</i></button>
+      <button *ngIf="sharedService.userRole !='Auditor'" class="btn btn-outline-primary add-btn" (click)="stopApp()" [disabled]="disableStop || sharedService.userRole =='Auditor'"><i
+          class="fas fa-stop" aria-hidden="true"> Stop</i></button>
+      <button *ngIf="sharedService.userRole !='Auditor'" class="btn btn-outline-primary add-btn" (click)="restartApp()" [disabled]="disableRestart || sharedService.userRole =='Auditor'"><i
+          class="fas fa-redo" aria-hidden="true"> Restart</i></button>
+      <button *ngIf="sharedService.userRole !='Auditor'" class="btn btn-outline-primary add-btn" (click)="browseApp()" [disabled]="disableBrowse || sharedService.userRole =='Auditor'"><i
+          class="fas fa-browser" aria-hidden="true"> Browse</i></button>
+      <button *ngIf="sharedService.userRole !='Auditor'" class="btn btn-outline-danger add-btn" data-toggle="modal" (click)="clickOnDelete()"
+        [disabled]=" disableDelete || sharedService.userRole =='Auditor'"><i class="fas fa-trash" aria-hidden="true"> Delete</i></button>
+      <button class="btn btn-outline-primary add-btn" (click)="selectResourceGroup()" [disabled]="disableRefresh"><i
+          class="fas fa-sync-alt" aria-hidden="true"> Refresh</i></button>
+    </div>
+    <div class="div-shadow">
+      <table class="table table-striped" aria-describedby="list-app-services">
+        <thead>
+          <th class="padding-name" id="name">Name</th>
+          <th id="status">Status</th>
+          <th id="location">Location</th>
+          <th id="appServicePlan">App Service Plan</th>
+          <th id="os">Operating System</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let app of listOfAppServices">
+            <td>
+              <img alt="Image result for app services svg images" style="width:25px;height:25px;" class="mr-2"
+              src="../../assets/images/App-Services.svg">
+              &nbsp;
+              <input class="form-check-input" type="radio" (change)="getApp(app)" name="gridRadios" id="gridRadios1">
+              <span class="webAppname">{{app.webAppName}}</span>
+            </td>
+            <td><span [ngClass]="{'green' :  app.status =='Running',
+                      'red': app.status =='Stopped'}"> {{app.status}}</span></td>
+            <td>{{app.location}}</td>
+            <td>{{app.appServicePlanName}}</td>
+            <td>{{app.operatingSystem}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p *ngIf="displayEmptyRow" class="text-center font-italic">No apps are present in this resource group</p>
+    </div>
+  </div>
+
+  <div *ngIf="showDeleteModal">
+    <app-delete-modal [delServiceName]="appServiceName" (confirmDelete)="deleteApp()"
+      (closeModalPopUp)="closeDeleteModal()"></app-delete-modal>
+  </div>
+  <div *ngIf="showRgModal">
+    <app-resourcegroup-modal (resGrpResponse)="resourceGrpResponse()" (closeModalPopUp)="closeResourceGroupModal()">
+    </app-resourcegroup-modal>
+  </div>

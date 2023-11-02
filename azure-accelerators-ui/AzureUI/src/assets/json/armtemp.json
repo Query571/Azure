@@ -1,0 +1,165 @@
+{
+    "variables": {},
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "resources": [
+        {
+            "apiVersion": "2020-11-01",
+            "name": "[parameters('virtualNetworks_Dev_Test_name')]",
+            "location": "eastus",
+            "type": "Microsoft.Network/virtualNetworks",
+            "properties": {
+                "virtualNetworkPeerings": [
+                    {
+                        "name": "azxdemo",
+                        "properties": {
+                            "remoteVirtualNetwork": {
+                                "id": "[parameters('virtualNetworks_AzureDevTestIndia_externalid')]"
+                            },
+                            "remoteAddressSpace": {
+                                "addressPrefixes": [
+                                    "172.0.0.0/16"
+                                ]
+                            },
+                            "allowVirtualNetworkAccess": true,
+                            "peeringState": "Connected",
+                            "allowGatewayTransit": false,
+                            "allowForwardedTraffic": false,
+                            "useRemoteGateways": false
+                        }
+                    }
+                ],
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "173.0.0.0/16"
+                    ]
+                },
+                "enableDdosProtection": false,
+                "dhcpOptions": {
+                    "dnsServers": []
+                },
+                "subnets": [
+                    {
+                        "name": "VMSubnet",
+                        "properties": {
+                            "addressPrefix": "173.0.0.0/24",
+                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "serviceEndpoints": []
+                        }
+                    },
+                    {
+                        "name": "VMSubnet1",
+                        "properties": {
+                            "addressPrefix": "173.0.1.0/24",
+                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "networkSecurityGroup": {
+                                "id": "[parameters('networkSecurityGroups_nsgtest1111_externalid')]"
+                            },
+                            "serviceEndpoints": []
+                        }
+                    },
+                    {
+                        "name": "VMSubnetIndia",
+                        "properties": {
+                            "addressPrefix": "173.0.2.0/24",
+                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "serviceEndpoints": []
+                        }
+                    }
+                ]
+            },
+            "tags": {
+                "Application": "AZX",
+                "Name": "Dev-Test"
+            }
+        },
+        {
+            "apiVersion": "2020-11-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_Dev_Test_name'))]"
+            ],
+            "name": "[concat(parameters('virtualNetworks_Dev_Test_name'), '/VMSubnet')]",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "properties": {
+                "addressPrefix": "173.0.0.0/24",
+                "privateLinkServiceNetworkPolicies": "Enabled",
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "serviceEndpoints": []
+            }
+        },
+        {
+            "apiVersion": "2020-11-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_Dev_Test_name'))]"
+            ],
+            "name": "[concat(parameters('virtualNetworks_Dev_Test_name'), '/VMSubnet1')]",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "properties": {
+                "addressPrefix": "173.0.1.0/24",
+                "privateLinkServiceNetworkPolicies": "Enabled",
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "networkSecurityGroup": {
+                    "id": "[parameters('networkSecurityGroups_nsgtest1111_externalid')]"
+                },
+                "serviceEndpoints": []
+            }
+        },
+        {
+            "apiVersion": "2020-11-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_Dev_Test_name'))]"
+            ],
+            "name": "[concat(parameters('virtualNetworks_Dev_Test_name'), '/VMSubnetIndia')]",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "properties": {
+                "addressPrefix": "173.0.2.0/24",
+                "privateLinkServiceNetworkPolicies": "Enabled",
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "serviceEndpoints": []
+            }
+        },
+        {
+            "apiVersion": "2020-11-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_Dev_Test_name'))]"
+            ],
+            "name": "[concat(parameters('virtualNetworks_Dev_Test_name'), '/azxdemo')]",
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "properties": {
+                "remoteVirtualNetwork": {
+                    "id": "[parameters('virtualNetworks_AzureDevTestIndia_externalid')]"
+                },
+                "remoteAddressSpace": {
+                    "addressPrefixes": [
+                        "172.0.0.0/16"
+                    ]
+                },
+                "allowVirtualNetworkAccess": true,
+                "peeringState": "Connected",
+                "allowGatewayTransit": false,
+                "allowForwardedTraffic": false,
+                "useRemoteGateways": false
+            }
+        }
+    ],
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualNetworks_Dev_Test_name": {
+            "type": "String"
+        },
+        "networkSecurityGroups_nsgtest1111_externalid": {
+            "type": "String"
+        },
+        "virtualNetworks_AzureDevTestIndia_externalid": {
+            "type": "String"
+        }
+    }
+}

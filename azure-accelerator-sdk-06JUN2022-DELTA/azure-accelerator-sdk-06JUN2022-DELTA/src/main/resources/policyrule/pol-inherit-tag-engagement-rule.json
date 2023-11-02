@@ -1,0 +1,15 @@
+{
+      "if": {
+        "field": "tags['Engagement']",
+        "exists": "false"
+      },
+      "then": {
+        "effect": "append",
+        "details": [
+          {
+            "field": "tags['Engagement']",
+            "value": "[resourceGroup().tags['Engagement']]"
+          }
+        ]
+      }
+}

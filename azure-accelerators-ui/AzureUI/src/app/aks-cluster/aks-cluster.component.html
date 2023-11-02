@@ -1,0 +1,768 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-fall" [fullScreen]="true">
+  <p class="white"> {{loadingMsg}} </p>
+</ngx-spinner>
+<div class="container-fluid">
+  <div class="text-left mt-5 details">AKS cluster details</div>
+  <div class="row">
+    <form [formGroup]="resourceClusterForm" class="col-sm-12">
+      <div class="form-group">
+        <span>
+          <label class="mt-3 col-3 col-form-label pl-0">Resource Group</label>
+        </span>
+        <div class="row azx-service-forms mt-0">
+          <span class="col-sm-3 pl-0">
+            <ngx-select-dropdown (change)="selectResourceGroup()" formControlName="resourceGroup" [multiple]="false" 
+              [config]="config" [options]="associatedResourceGroup"><button>resourceGroup</button></ngx-select-dropdown>
+            <button class="btn btn-outline-primary border-0 rg-btn" (click)="addReg()" [disabled]="sharedService.userRole =='Auditor' || disablerg"> Create New</button>
+          </span>
+          <span class="col-sm-2">
+            <button class="btn btn-outline-primary w-100" (click)="displayForm()" [disabled]="disableAddbtn || sharedService.userRole =='Auditor'"><i
+                class="fa fa-plus" aria-hidden="true"></i> AKS CLUSTER</button>
+          </span>
+          <span class="col-sm-2">
+            <button class="btn btn-outline-primary w-100" (click)="refresh()" [disabled]="disableRefresh"><i
+                class="fas fa-sync-alt" aria-hidden="true"></i> REFRESH
+            </button>
+          </span>
+          <!-- <span class="col-sm-2 text-right p-0">
+            <button class="btn btn-outline-dark" (click)="downloadAll()" [disabled]="exportDisabled"><i class="fa fa-download"></i> EXPORT ALL</button>
+          </span> -->
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- <div *ngIf="loader" class="alert alert-light border-0" role="alert">
+    <h6 class="text-primary text-center mb-4">{{loadingMsg}}</h6>
+    <ngx-spinner bdColor="transparent" size="default" color="#0275d8" type="ball-elastic-dots" [fullScreen]="false"
+      name="refreshSpinner">
+    </ngx-spinner>
+  </div> -->
+
+  <div *ngIf="enableAddAksClusterForm" class="p-5 bg-light">
+    <form [formGroup]="aksClusterForm" (ngSubmit)="deployCluster()" class="col-sm-7">
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">AKS Name:
+
+          <button class="btn  border-0 ml-0 bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+          matTooltip="The name of the Azure Kubernetes Service cluster."
+           matTooltipPosition="above" >
+           <i class="fal fa-info-circle"></i></button></label> 
+
+        <div class="col-sm-8">
+          <input type="text" class="form-control input-styles" formControlName="aksName" maxlength="32" minlength="2" placeholder="AKS Name" maxlength="32" minlength="2">
+          <span class="text-danger"
+            *ngIf="(aksClusterFormControl.aksName.touched || submitted) && aksClusterFormControl.aksName.errors?.required">
+            <small>Aks Name is required</small>
+          </span>
+          <span class="text-danger"
+              *ngIf="aksClusterFormControl.aksName.errors?.minlength ||aksClusterFormControl.aksName.errors?.maxlength">
+             <small> It must be 2 to 32 characters long.</small>
+           </span>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Resource Group:
+          <button class="btn  border-0 ml-0 bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+          matTooltip="A resource group is a collection of resources that share the same lifecycle, permissions, and policies."
+           matTooltipPosition="above" >
+           <i class="fal fa-info-circle"></i></button></label> 
+
+        <div class="col-sm-8">
+          <input type="text" class="form-control input-styles" [(value)]="selectedResourceGroup" disabled>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Location:
+          <button class="btn  border-0 ml-0  bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+              matTooltip="Choose the Azure region that's right for you and your customers. Not all VM sizes are available in all regions."
+               matTooltipPosition="above" >
+               <i class="fal fa-info-circle"></i></button></label>
+
+        <div class="col-sm-8">
+          <ngx-select-dropdown (change)="selectLocation()" formControlName="location" [multiple]="false"
+            [config]="locationConfig" [options]="associatedLocations"></ngx-select-dropdown>
+          <span class="text-danger"
+            *ngIf="(aksClusterFormControl.location.touched || submitted) && aksClusterFormControl.location.errors?.required">
+            <small>Location should not be empty </small>
+          </span>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Node Size:
+
+          <button class="btn  border-0 ml-0  bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+              matTooltip="The size of the virtual machines that will form the nodes in the cluster. This cannot be changed after creating the cluster."
+               matTooltipPosition="above" >
+               <i class="fal fa-info-circle"></i></button></label>
+
+        <div class="col-sm-8">
+          <ngx-select-dropdown (change)="selectVmSize($event)" formControlName="vmSize" [multiple]="false"
+            [config]="vmConfig" [options]="assosiateVmSizes"></ngx-select-dropdown>
+          <span class="text-danger"
+            *ngIf="(aksClusterFormControl.vmSize.touched || submitted) && aksClusterFormControl.vmSize.errors?.required">
+            <small>Node Size should not be empty </small>
+          </span>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Node Count:
+
+          <button class="btn  border-0 ml-0  bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+              matTooltip="Set the minimum and maximum node counts for this node pool. You cannot set a lower minimum than the current node count in this node pool. If you want to set a lower minimum node count, you will need to manually scale down the cluster first."
+               matTooltipPosition="above" >
+               <i class="fal fa-info-circle"></i></button></label>
+
+        <div class="col-sm-8">
+          <input type="text" class="form-control input-styles" id="nodecountId"  formControlName="vmCount"
+          (keypress)="keyPressAlphanumeric($event)" minlength="1" maxlength="3">
+          <span class="text-danger"
+            *ngIf="(aksClusterFormControl.vmCount.touched || submitted) && aksClusterFormControl.vmCount.errors?.required">
+            <small>Node count should not be empty </small>
+          </span>
+          <span class="text-danger" *ngIf="aksClusterFormControl.vmCount.errors?.min">
+            <small>Node count should not be negative/zero </small>
+          </span>
+
+          <span class="text-danger"
+          *ngIf="aksClusterFormControl.vmCount.errors?.min || aksClusterFormControl.vmCount.errors?.max">
+         <small> It must range between 1 to 100 </small>
+       </span>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Agent Pool Mode:
+
+          <button class="btn  border-0 ml-0  bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+              matTooltip="Choose between 'system' and 'user' mode for this node pool. System node pools are preferred for system pods (used to keep AKS running) and have size and other restrictions to ensure they have enough capacity to run those pods. User node pools are preferred for your application pods although application pods may be scheduled on system node pools."
+               matTooltipPosition="above" >
+               <i class="fal fa-info-circle"></i></button></label>
+
+        <div class="col-sm-8">
+          <ngx-select-dropdown (change)="selectMode()" formControlName="apMode" [multiple]="false" [config]="modeConfig"
+            [options]="agentPoolMode"></ngx-select-dropdown>
+          <span class="text-danger"
+            *ngIf="(aksClusterFormControl.apMode.touched || submitted) && aksClusterFormControl.apMode.errors?.required">
+            <small>Agent Pool Mode should not be empty </small>
+          </span>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">OS Type:
+
+          <button class="btn  border-0 ml-0  bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+              matTooltip="Choose the OS type for the VMs in this node pool.For Windows, the cluster needs to have a Windows authentication profile and cannot br using the kubernet network plugin.  "
+               matTooltipPosition="above" >
+               <i class="fal fa-info-circle"></i></button></label>
+
+        <div class="col-sm-8">
+          <ngx-select-dropdown formControlName="osType" [multiple]="false" [config]="osConfig" [options]="osType">
+          </ngx-select-dropdown>
+          <span class="text-danger"
+            *ngIf="(aksClusterFormControl.osType.touched || submitted) && aksClusterFormControl.osType.errors?.required">
+            <small>OS Type should not be empty </small>
+          </span>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Select ACR :
+        
+          
+          </label>
+
+        <div class="col-sm-4" style="padding-left: 35px;">
+          <input   class="form-check-input" type="checkbox" value="" id="acrcheckboxid" (change)="onSelectACRChange($event.target.checked)" formControlName="acrselect"/>
+
+        </div>
+      </div>
+      <div *ngIf="enableACR" class="form-group row">
+        <label class="col-sm-4 col-form-label">ACR:
+          <button class="btn  border-0 ml-0  bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+          matTooltip=" "
+           matTooltipPosition="above" >
+           <i class="fal fa-info-circle"></i></button></label>
+
+        <div class="col-sm-8">
+          <ngx-select-dropdown formControlName="acr" [multiple]="false" [config]="acrConfig" [options]="acrdata">
+          </ngx-select-dropdown>
+          <!-- <span class="text-danger"
+            *ngIf="(aksClusterFormControl.acr.touched || submitted) && aksClusterFormControl.acr.errors?.required">
+            <small>ACR should not be empty </small>
+          </span> -->
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Disk Size(in GB):
+
+      
+              </label>
+
+        <div class="col-sm-8">
+          <input type="text" class="form-control input-styles" formControlName="diskSize" minlength="1" maxlength="4" (keypress)="keyPressAlphanumeric($event)">
+          <span class="text-danger"
+            *ngIf="(aksClusterFormControl.diskSize.touched || submitted) && aksClusterFormControl.diskSize.errors?.required">
+            <small>Disk Size should not be empty </small>
+          </span>
+          <span class="text-danger"
+            *ngIf="aksClusterFormControl.diskSize.errors?.min || aksClusterFormControl.diskSize.errors?.max">
+            <small>Disk Size must be between 30 and 2048 </small>
+          </span>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Enable secret store CSI driver:
+          <!-- <button class="btn btn-outline-dark ml-1 border-0" (click)="showRepoDetails()">
+          <i class="fa fa-info-circle" aria-hidden="true"></i></button> -->
+        
+          </label>
+
+        <div class="col-sm-4" style="padding: 25px;padding-left: 35px;">
+          <input   class="form-check-input" type="checkbox" value="" id="checkboxid" (change)="onChange($event.target.checked)" formControlName="csidriver"/>
+
+        </div>
+        <!-- <div class="col-sm-4">
+          <div *ngIf="showmsg">I am shown when someone hovers over the div above.</div>
+
+        </div> -->
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Max Pod Count:
+
+          <button class="btn  border-0 ml-0  bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+              matTooltip="You can configure the maximum number of pods that can be run on a node which affects how many IP addresses you will need for each node pool. You can specify a value between 30 and 250. "
+               matTooltipPosition="above" >
+               <i class="fal fa-info-circle"></i></button></label>
+
+        <div class="col-sm-8">
+          <input type="text" class="form-control input-styles" formControlName="podCount" minlength="1" maxlength="3" (keypress)="keyPressAlphanumeric($event)">
+          <span class="text-danger"
+            *ngIf="(aksClusterFormControl.podCount.touched || submitted) && aksClusterFormControl.podCount.errors?.required">
+            <small>Max Pod Count should not be empty </small>
+          </span>
+          <span class="text-danger"
+            *ngIf="aksClusterFormControl.podCount.errors?.min ||aksClusterFormControl.podCount.errors?.max ">
+            <small>Max Pod Count must be between 30 and 250 </small>
+          </span>
+        </div>
+      </div>
+      <div class="form-group row">
+        <button type="submit" class="btn btn-primary ml-2" [disabled]="aksClusterForm.invalid || (enableACR && aksClusterForm.value.acr == null)">Deploy</button>
+        <button class="btn btn-outline-secondary ml-3" (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- node Pool form -->
+
+  <div *ngIf="enableAddNodePoolForm" class="p-5 bg-light">
+    <form [formGroup]="addNodePoolForm">
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">AKS Name:
+          <button class="btn  border-0 ml-0 bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+          matTooltip="The name of the Azure Kubernetes Service cluster."
+           matTooltipPosition="above" >
+           <i class="fal fa-info-circle"></i></button>
+
+        </label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control input-styles" formControlName="aksName" placeholder="AKS Name">
+          <span class="text-danger"
+            *ngIf="(addNodePoolFormControl.aksName.touched || submitted) && addNodePoolFormControl.aksName.errors?.required">
+            <small>Aks Name is required</small>
+          </span>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Resource Group:
+          <button class="btn  border-0 ml-0 bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+          matTooltip="A resource group is a collection of resources that share the same lifecycle, permissions, and policies."
+           matTooltipPosition="above" >
+           <i class="fal fa-info-circle"></i></button>
+          
+        </label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control input-styles" [(value)]="selectedResourceGroup" disabled>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">OS Type: 
+          <button class="btn  border-0 ml-0 bg-transparent"  data-toggle="modal" data-backdrop="static" data-keyboard="false"
+          matTooltip="Choose the OS type for the VMs in this node pool.For Windows, the cluster needs to have a Windows authentication profile and cannot br using the kubernet network plugin."
+           matTooltipPosition="above"  >
+           <i class="fal fa-info-circle"></i></button>
+        </label>
+        <div class="col-sm-4">
+          <ngx-select-dropdown formControlName="osType" [multiple]="false" [config]="osConfig" [options]="osType">
+          </ngx-select-dropdown>
+          <span class="text-danger"
+            *ngIf="(addNodePoolFormControl.osType.touched || submitted) && addNodePoolFormControl.osType.errors?.required">
+            <small>OS Type should not be empty </small>
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Pool Name:
+          <!-- <button class="btn  border-0 ml-0 bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+          matTooltip="A resource group is a collection of resources that share the same lifecycle, permissions, and policies."
+           matTooltipPosition="above" >
+           <i class="fal fa-info-circle"></i></button> -->
+
+        </label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control input-styles" formControlName="nodePoolName" maxlength="32"
+            (ngModelChange)="isUnique()"  (ngModelChange)="poolnamevalidation()" placeholder="NodePoolName">
+          <span class="text-danger"
+            *ngIf="(addNodePoolFormControl.nodePoolName.touched || submitted) && addNodePoolFormControl.nodePoolName.errors?.required">
+            <small>Pool Name is required</small>
+          </span>
+          <span class="text-danger"
+          *ngIf="addNodePoolFormControl.nodePoolName.errors?.pattern">
+          <small>Pool Name cannot have uppercase letter. </small>
+        </span>
+
+          <span class="text-danger" *ngIf="addNodePoolFormControl.nodePoolName.errors?.maxlength && lengthErr">
+            <small>Pool Name should have maximum of {{nodepoolchar}} characters. </small>
+          </span>
+          <span class="text-danger" *ngIf="invalidNodeName">
+            <small>{{uniqueNameErrMsg}}</small>
+          </span>
+          
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Node Size:
+
+          <button class="btn  border-0 ml-0 bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+          matTooltip="The size of the virtual machines that will form the nodes in the cluster. This cannot be changed after creating the cluster."
+           matTooltipPosition="above" >
+           <i class="fal fa-info-circle"></i></button>
+        </label>
+        <div class="col-sm-4">
+          <ngx-select-dropdown (change)="selectVmSize($event)" formControlName="vmSize" [multiple]="false"
+            [config]="vmConfig" [options]="assosiateVmSizes"></ngx-select-dropdown>
+          <span class="text-danger"
+            *ngIf="(addNodePoolFormControl.vmSize.touched || submitted) && addNodePoolFormControl.vmSize.errors?.required">
+            <small>Node Size should not be empty </small>
+          </span>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Node Count:
+          <button class="btn border-0 ml-0 bg-transparent" data-toggle="modal" data-backdrop="static" data-keyboard="false"
+          matTooltip="Set the minimum and maximum node counts for this node pool. You cannot set a lower minimum than the current node count in this node pool. If you want to set a lower minimum node count, you will need to manually scale down the cluster first."
+           matTooltipPosition="above"> 
+          <i class="fal fa-info-circle"></i></button>
+
+        </label>
+        <div class="col-sm-4">
+          <input  type="text" class="form-control input-styles" formControlName="vmCount" minlength="1" maxlength="3" (keypress)="keyPressAlphanumeric($event)">
+          <span class="text-danger"
+            *ngIf="(addNodePoolFormControl.vmCount.touched || submitted) && addNodePoolFormControl.vmCount.errors?.required">
+            <small>Node count should not be empty </small>
+          </span>
+          <span class="text-danger" *ngIf="addNodePoolFormControl.vmCount.errors?.min">
+            <small>Node count should not be negative </small>
+          </span>
+
+          <span class="text-danger"
+          *ngIf="addNodePoolFormControl.vmCount.errors?.min || addNodePoolFormControl.vmCount.errors?.max">
+         <small> It must range between 1 to 100 </small>
+       </span>
+
+        </div>
+      </div>
+     
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Disk Size(in GB):
+          <!-- <button class="btn  border-0 ml-0 bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+          matTooltip="A resource group is a collection of resources that share the same lifecycle, permissions, and policies."
+           matTooltipPosition="above" >
+           <i class="fal fa-info-circle"></i></button> -->
+
+        </label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control input-styles" formControlName="diskSize"  minlength="1" maxlength="4" (keypress)="keyPressAlphanumeric($event)">
+          <span class="text-danger"
+            *ngIf="(addNodePoolFormControl.diskSize.touched || submitted) && addNodePoolFormControl.diskSize.errors?.required">
+            <small>Disk Size should not be empty </small>
+          </span>
+          <span class="text-danger"
+            *ngIf="addNodePoolFormControl.diskSize.errors?.min || addNodePoolFormControl.diskSize.errors?.max">
+            <small>Disk Size must be between 30 and 2048 </small>
+          </span>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Max Pod Count:
+
+          <button class="btn  border-0 ml-0 bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+          matTooltip="You can configure the maximum number of pods that can be run on a node which affects how many IP addresses you will need for each node pool. You can specify a value between 30 and 250."
+           matTooltipPosition="above" >
+           <i class="fal fa-info-circle"></i></button>
+           
+           
+        </label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control input-styles" formControlName="podCount"  minlength="1" maxlength="3" (keypress)="keyPressAlphanumeric($event)">
+          <span class="text-danger"
+            *ngIf="(addNodePoolFormControl.podCount.touched || submitted) && addNodePoolFormControl.podCount.errors?.required">
+            <small>Max Pod Count should not be empty </small>
+          </span>
+          <span class="text-danger"
+            *ngIf="addNodePoolFormControl.podCount.errors?.min ||addNodePoolFormControl.podCount.errors?.max ">
+            <small>Max Pod Count must be between 30 and 250 </small>
+          </span>
+        </div>
+      </div>
+      <div class="form-group row">
+        <button type="submit" class="btn btn-primary ml-2"
+          [disabled]="addNodePoolForm.invalid || invalidNodeName" (click)="addNodePool()"> Add </button>
+        <button class="btn btn-outline-secondary ml-3" (click)="addNodePoolCancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
+  <div *ngIf="displayTable">
+  <h6 style="display: inline;">. </h6><a style="float: right;">{{refreshTime}} &nbsp;&nbsp; <i style="color: #007bff;cursor: pointer;margin-right: 20px;" (click)="onRefreshClick()"  class="fas fa-sync-alt" > </i></a>
+</div>
+  <div *ngIf="displayTable" class="div-shadow">
+    <table id="associationTable" class="table table-striped" aria-describedby="list-aks-cluster">
+      <thead>
+        <tr>
+          <th id="list-aksName">AKS Name</th>
+          <th id="list-resourceGroupName">Resource Group</th>
+          <th id="location">Location</th>
+          <th id="status">Status</th>
+          <th id="state">Power State</th>
+          <th id="kubernatesVersion">Kubernetes Version</th>
+          <th id="action">Action</th>
+          <th id="csi">Secret store CSI driver</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let aksCluster of aksClusterList">
+          <td>
+            <img alt="Image result for app services svg images" style="width:25px;height:25px;" class="mr-2"
+            src="../../assets/images/Kubernetes-Services.svg">
+            &nbsp;
+            {{aksCluster.aksName}}
+            <button class="btn btn-outline-dark ml-1 border-0" matTooltip="Node Details" matTooltipPosition="above"
+              (click)="showNodePooldetails(aksCluster)"><i class="fa fa-info-circle" aria-hidden="true"></i></button>
+          </td>
+          <td>{{aksCluster.resourceGroup}}</td>
+          <td>{{aksCluster.location}}</td>
+        
+          <td><span [ngClass]="{'green' : (aksCluster.status=='Succeeded' || aksCluster.status == 'Starting'),
+            'red':(aksCluster.status == 'Stopping' ||  aksCluster.status == 'Failed'),  'blue': aksCluster.status == 'Upgrading'}">{{aksCluster.status}} </span></td>
+  
+              <td><span [ngClass]="{'green' : aksCluster.powerState=='Running',
+                'red': aksCluster.powerState=='Stopped'}">{{aksCluster.powerState}}</span></td>
+        
+          <td>{{aksCluster.kubernetesVersion}}</td>
+          <td>
+            <button *ngIf="sharedService.userRole !='Auditor' && (aksCluster.status== 'Succeeded' && aksCluster.powerState == 'Running')" class="btn btn-outline-dark border-0" data-toggle="modal" data-target="#dashboardAKSModal"  data-backdrop="static" data-keyboard="false"
+              (click)="kubeDashboardPopUp(aksCluster)" matTooltip="Kubernetes Dashboard" matTooltipPosition="above"
+              [disabled]="(aksCluster.status=='Deleting') || (aksCluster.status=='Upgrading') || (aksCluster.status=='Creating') || sharedService.userRole =='Auditor'"><i
+                class="fas fa-chart-line" aria-hidden="true"></i> </button>
+
+            <button *ngIf="sharedService.userRole !='Auditor' && (aksCluster.status== 'Succeeded' && aksCluster.powerState == 'Running')  " class="btn btn-outline-dark border-0" data-toggle="modal" data-target="#upgradeAKSModal"  data-backdrop="static" data-keyboard="false"
+              (click)="upgrade(aksCluster)" matTooltip="Upgrade kubernetes Version" matTooltipPosition="above"
+              [disabled]="(aksCluster.status=='Deleting') || (aksCluster.status=='Upgrading') || (aksCluster.status=='Creating') || sharedService.userRole =='Auditor'"><i
+                class="fas fa-level-up" aria-hidden="true"></i> </button>
+
+            <button class="btn btn-outline-danger border-0" (click)="delete(aksCluster)" matTooltip="Delete"
+              matTooltipPosition="above"
+              [disabled]="(aksCluster.status=='Deleting') || (aksCluster.status=='Upgrading') || (aksCluster.status=='Creating') || sharedService.userRole =='Auditor'"><i
+                class="fa fa-trash" aria-hidden="true"></i></button>
+                <button *ngIf="sharedService.userRole !='Auditor' && ((aksCluster.status== 'Succeeded' || aksCluster.status == 'Failed') && aksCluster.powerState == 'Stopped')" class="btn btn-outline-primary border-0" (click)="startAKS(aksCluster)" [disabled]="(aksCluster.status=='Deleting') || (aksCluster.status=='Upgrading') || (aksCluster.status=='Creating') || sharedService.userRole =='Auditor'"><i
+                  class="fa fa-play" aria-hidden="true" matTooltip="Start" matTooltipPosition="above"> </i></button>
+              <button *ngIf="sharedService.userRole !='Auditor' &&  ((aksCluster.status== 'Succeeded' || aksCluster.status == 'Failed') && aksCluster.powerState == 'Running')" class="btn btn-outline-primary border-0" (click)="stopAKS(aksCluster)" [disabled]="(aksCluster.status=='Deleting') || (aksCluster.status=='Upgrading') || (aksCluster.status=='Creating') || sharedService.userRole =='Auditor'"><i
+                  class="fas fa-stop" aria-hidden="true" matTooltip="Stop" matTooltipPosition="above"> </i></button>
+          </td>
+          <td>
+            <button *ngIf="!aksCluster.isEnabled.azureKeyvaultSecretsProvider.enabled" class="btn btn-outline-primary" (click)="enablesecrets(aksCluster)" [disabled]="sharedService.userRole =='Auditor'" >Enable</button>
+            <button *ngIf="aksCluster.isEnabled.azureKeyvaultSecretsProvider.enabled" class="btn btn-outline-primary" (click)="disablesecrets(aksCluster)" [disabled]="sharedService.userRole =='Auditor'">Disable</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p *ngIf="displayEmptyRow" class="text-center font-italic">No AKS Cluster is present in this resource group</p>
+  </div>
+  <div *ngIf="nodeDetails">
+    <span class=" font-weight-bold">AKS Name : <em>{{aksName}}</em></span>
+    <button class="btn btn-outline-primary border-0 ml-2" (click)="onClickAddNodepool()" [disabled]="sharedService.userRole =='Auditor'">
+      <i class="fa fa-plus" aria-hidden="true"></i> Node pool</button>
+    <button type="button" class="close" (click)="hideNodePooldetails()">
+      <span aria-hidden="true"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></span>
+    </button>
+    <div class="div-shadow">
+      <table class="table table-striped mt-3" aria-describedby="list-aks-node">
+        <thead>
+          <tr>
+            <th id="poolName">Pool Name</th>
+            <th id="poolMode">Pool Mode</th>
+            <th id="state">Provisioning State</th>
+            <th id="state">Power State</th>
+            <th id="nodeVersion">Node Version</th>
+            <th id="osType">OS Type</th>
+            <th id="vmCount">Node Count</th>
+            <th id="vmSize">Node Size</th>
+            <th id="action">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let node of nodePoolList">
+            <td>{{node.name}}</td>
+            <td>{{node.poolMode}}</td>
+            <td><span [ngClass]="{'green' : node.provisioningState=='Succeeded',
+              'blue': node.provisioningState=='Scaling'|| node.provisioningState=='Upgrading',
+              'red': node.provisioningState=='Failed'}">{{node.provisioningState}} </span></td>
+              <td><span [ngClass]="{'green' : node.powerState =='Running',
+                'red': node.powerState =='Stopped'}">{{node.powerState}}</span></td>
+            <td>{{node.version}}</td>
+            <td>{{node.osType}}</td>
+            <td>{{node.vmCount}}<form>
+              </form>
+            </td>
+            <td>{{node.vmSize}}</td>
+            <td><button class="btn btn-outline-dark border-0" matTooltip="Scale Node" matTooltipPosition="above"
+                data-toggle="modal" data-target="#scaleModal" data-backdrop="static" data-keyboard="false" (click)="onClickUp(node)" 
+                [disabled]="sharedService.userRole == 'Auditor' || (node.provisioningState=='Deleting') || (node.provisioningState=='Upgrading') || (node.provisioningState=='Creating') || (node.provisioningState=='Scaling')">
+                <i class="fas fa-arrows-alt-h" aria-hidden="true"></i></button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div *ngIf="viewDetails" class="aksmodal">
+    <div class="aksmodal-dialog">
+      <div class="aksmodal-content">
+        <div class="aksmodal-header">
+          <h5 class="modal-title text-success text-center" id="exampleModalLabel">SUCCESS!!!:</h5>
+        </div>
+        <div class="aksmodal-body">
+          <form>
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label ">AKS Name:</label>
+              <div class="col-sm-8">
+                {{details.aksName}}
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">Resource Group:</label>
+              <div class="col-sm-8">
+                {{details.resourceGroup}}
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">Location:</label>
+              <div class="col-sm-8">
+                {{details.location}}
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">Status:</label>
+              <div class="col-sm-8 text-success">
+                {{details.status}}
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="aksmodal-footer">
+          <button type="button" class="btn btn-outline-primary" (click)="done()">DONE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" tabindex="-1" role="dialog" id="dashboardAKSModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Kubernetes Dashboard Token</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="dashboardForm">
+            <div>
+              <textarea style="width:-moz-available" name="" id="" cols="55" rows="5" formControlName="dashboardtoken" #token readonly>
+              </textarea>
+              <ngx-spinner bdColor="#fff" size="default" color="#0275d8" type="ball-elastic-dots" [fullScreen]="false"
+                name="tokenSpinner">
+              </ngx-spinner>
+            </div>
+            <button type="button" class="btn btn-outline-primary" [disabled]="dashboardForm.invalid" (click)="copyToken(token)">
+              <i class="fas fa-copy mr-1" aria-hidden="true"></i>Copy Token</button>
+            <div class="alert alert-info mt-2" role="alert">
+              Please copy the token for logging onto Dashboard.
+            </div>
+          </form>
+          <div class="text-right">
+            <button type="button" class="btn btn-outline-success" data-dismiss="modal" [disabled]="disRedirect"
+              (click)="redirectToDashboard()">Go to Dashboard</button>
+          </div>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="showDeleteModal">
+    <app-delete-modal [delServiceName]="aksName" (confirmDelete)="deleteAKS()" (closeModalPopUp)="closeDeleteModal()">
+    </app-delete-modal>
+  </div>
+
+
+
+  <div class="modal fade tooltips" tabindex="-1" role="dialog" id="upgradeAKSModal">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Upgrade Kubernetes Version</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <ngx-spinner bdColor="#fff" size="default" color="#0275d8" type="ball-elastic-dots" [fullScreen]="false"
+              name="modalSpinner-upgrade">
+            </ngx-spinner>
+          </div>
+          <div class="alert alert-info" role="alert">
+            {{upgradeMessage}}
+          </div>
+          <form [formGroup]="upgradeForm">
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">Resource Group:
+                <button class="btn  border-0 ml-0 bg-transparent  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+              matTooltip="A resource group is a collection of resources that share the same lifecycle, permissions, and policies."
+               matTooltipPosition="above" >
+               <i class="fal fa-info-circle"></i></button>
+              </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" [(value)]="selectedResourceGroup"
+                  formControlName="resourceGroup">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label ">AKS Name:
+                <button class="btn  border-0  bg-transparent ml-0  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+                matTooltip="The name of the Azure Kubernetes Service cluster." matTooltipClass="popups"
+                 matTooltipPosition="above" >
+                 <i class="fal fa-info-circle"></i>
+                </button>
+
+              </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" formControlName="aksName" [(value)]="upgradeAksName">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label ">Version:
+
+                <button class="btn  border-0  bg-transparent ml-0  " data-toggle="modal" data-backdrop="static" data-keyboard="false"
+              matTooltip=" The version of Kubernetes that should be used for this cluster. You will be able to upgrade this version after creating the cluster." matTooltipClass="popups"
+               matTooltipPosition="above" >
+               <i class="fal fa-info-circle"></i>
+              </button>
+              </label>
+              <div class="col-sm-8">
+                <ngx-select-dropdown (change)="selectKubernetesVersion()" [multiple]="false" [config]="kubernetesConfig"
+                  formControlName="kubernetesVersion" [options]="kubernetesVersion">
+                </ngx-select-dropdown>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label "></label>
+              <div class="col-sm-8 text-right">
+                <button type="button" class="btn btn-outline-primary" (click)="confirmUpgrade()"
+                  [disabled]="disableUpgrade">Upgrade</button>
+              </div>
+            </div>
+            <div *ngIf="showMessage" class="form-group">
+              <div class="alert  alert-warning" role="alert">
+                {{infoMessage}}
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label "></label>
+                <div class="col-sm-8 text-right">
+                  <button type="button" class="btn btn-outline-success mr-2" data-dismiss="modal"
+                    (click)="upgradeAKSVersion()">Confirm</button>
+                  <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"
+                    (click)="cancelUpgrade()">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="scaleModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Scaling Node</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="scaleForm">
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Resource Group:</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" [(value)]="selectedResourceGroup" formControlName="resourceGroup">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label ">AKS Name:</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" formControlName="aksName" [(value)]="aksName">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label ">Pool Name:</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" formControlName="nodePoolName" [(value)]="nodePoolName">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Node Count:</label>
+            <div class="range col-sm-6">
+              <input class='range__slider form-control pl-0 pr-0'  id='slider' min="1" max="100"
+                oninput='amount.value=slider.value' type='range' formControlName="scaleRange"
+                [(ngModel)]="existingVmCount">
+                
+            </div>
+            <div class="range col-sm-2">
+              <input class='range__amount form-control' id='amount' oninput='slider.value=amount.value' type='text'
+                formControlName="scaleInput" [(ngModel)]="existingVmCount"
+                (change)="onChangeScaleInput($event.target.value)"  (keypress)="keyPressAlphanumeric($event)" minlength="1" maxlength="2" >
+            </div>
+          </div>
+        </form>
+        <div class="alert alert-danger" role="alert"
+          *ngIf="scaleFormControls.scaleInput.errors?.min || scaleFormControls.scaleInput.errors?.max">
+          <small>Node count should between 1 and 30 </small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="nodeScale()"
+          [disabled]="scaleForm.invalid">Confirm</button>
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="showRgModal">
+  <app-resourcegroup-modal (resGrpResponse)="resourceGrpResponse()" (closeModalPopUp)="closeResourceGroupModal()">
+  </app-resourcegroup-modal>
+</div>

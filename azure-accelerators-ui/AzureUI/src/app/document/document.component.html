@@ -1,0 +1,1468 @@
+<html><head><style>
+
+  body {
+      color: black;
+      overflow-y: auto;
+      overflow-x: auto;
+      margin-left: 20px;
+
+   }
+   table, th, td {
+    border:1px solid black;
+    text-align: center;
+  }
+   </style>
+   </head>
+   <body>
+    
+    <p><strong>Xoriant Confidential</strong></p><br><br>
+  
+   <p><img src="../../assets/images/logo.png" alt="logo" style="width: 22em;height: 11em;"></p>
+   <br><br><br>
+   <h1 id="azx-azure-accelerator">AZX- AZURE ACCELERATOR</h1>
+   <br>
+   <p><strong>The Utility Runbook</strong></p>
+   <br>
+   <p><strong>Restricted Rights Legend</strong></p>
+   <h6 id="the-information-contained-in-this-document-is-confidential-and-subject-to-change-without-notice-no">The information contained in this document is confidential and subject to change without notice. No
+  part of this document may be reproduced or disclosed to others without the prior permission of Xoriant Corporation.</h6>
+   
+  <br>
+  <p><strong>Copyright</strong></p>
+   <h6 id="-copyright-2022-xoriant-corporation">© Copyright 2022 Xoriant Corporation</h6>
+   <br><br>
+   <h6 id="this-is-an-uncontrolled-copy-when-in-printed-form-">This is an uncontrolled copy when in printed form.</h6>
+  
+   <table>
+   <tr>
+   <td><strong>Owner</strong></td>
+   <td>Abhi Sapre</td>
+   </tr>
+  
+   <tr>
+   <td><strong>Draft Owner</strong></td>
+   <td>Abhinov Ray</td>
+   </tr>
+   <tr>
+   <td><strong>Responsible Group</strong></td>
+   <td>Shankar Sitaraman, Abhinov Ray, Yuvraj Rathod</td>
+   </tr>
+   <tr>
+   <td><strong>Revision Date</strong></td>
+   <td>4<sup>th</sup> November 2022</td>
+   </tr>
+   <tr>
+   <td><strong>Last Re-validation Date</strong></td>
+   <td></td>
+   </tr>
+   <tr>
+   <td><strong>Abstract</strong></td>
+   <td>An instruction guide to walk the utility ,features and functionalities.</td>
+   </tr>
+   <tr>
+   <td><strong>Applicability</strong></td>
+   <td>An instruction guide to walk the utility ,features and functionalities.</td>
+   </tr>
+   <tr>
+   <td><strong>Status</strong></td>
+   <td>Draft,</td>
+   </tr>
+   </table>
+  
+   <br><br>
+   <p> <strong>Revision date</strong>  - 4<sup>th</sup> November 2022</p>
+    <p>
+    <strong>Brief Description of change - </strong>  Initial Publication<br> </p>
+    <p>
+    <strong>Revision Authority POC</strong>  - Shankar Sitaraman</p>
+    <br>
+    
+   <ul>
+    
+   <li><p>For information about this document, contact: Xoriant Security Practices </p>
+  
+   </li>
+   </ul>
+   <ol>
+   <li>Overview <br>
+    1.1 Manage Subscription <br>
+   1.2    Role Based Access Control (RBAC)<br>
+   1.3    The Utility Admin login <br>
+   1.4    Create Resource Group</li> <br>
+  
+   <li>SECURITY & MONITORING SERVICES <br>
+   2.1    Monitor <br>
+   2.2   Policy </li><br>
+  
+   <li>PaaS (Platform as a service) <br>
+   3.1    SQL Database <br>
+   3.1.1    Create SQL Server  <br>
+   3.2    Key Vaults <br>
+   3.3    App Deploy Services <br>
+   3.3.1  App Service<br>
+   3.3.2  Deploy Service<br>
+   3.4    Container Services <br>
+   3.4.1    AKS Cluster Deployment <br>
+   3.4.2    Container Registries <br>
+   3.4.3    AKS App Deployment</li> <br>
+  
+   <li>IaaS (Infrastructure as a Service) <br>
+   4.1    Virtual Network <br>
+   4.1.1    Virtual Network <br>
+   4.1.2    Network Security group <br>
+   4.2    Storage Account<br>
+   4.3    Virtual Machine<br>
+   4.3.1    Create SSH KEY <br>
+   4.4    ARM Template</li><br>
+
+  <li> Azure DevOPs<br></li>
+
+
+  
+   <br><br>
+   
+   </ol>
+   <h3 id="1-overview">1. Overview</h3><br>
+   <ul>
+   <li>Users can use this utility to access Azure services, which are divided into three categories: <strong>Security & Monitoring Services</strong>, <strong>PaaS</strong>, and <strong>IaaS</strong>. With greater efficiency, standardisation, and consistency, this simplified procedure would make governance and compliance to industry and organisational requirements for all Azure services much easier.</li>
+   <li><p>This utility provides customized features  with minimum parameters that are needed to set up the Azure cloud infrastructure components.</p></li>
+   <li><h5 id="services-offered-by-azx-are-listed-below-">Services offered by AZX are listed below:</h5></li>
+   
+      <ul>
+   <li><p><strong>Security & Monitoring Services</strong></p>
+   <p> Monitor, Policy.</p>
+   </li>
+  
+   
+   <li><p><strong>PaaS (Platform as a service)</strong></p>
+   <p>SQL Database, Key Vaults, App Services, Container Services (AKS Cluster Deployment, Container Registries, AKS App Deployment)</p>
+   </li>
+   <li><p><strong>IaaS (Infrastructure as a Service)</strong></p>
+   <p> Virtual Network (Virtual Network, Network Security Group), Storage Account, Virtual Machine.</p>
+   <br><br>
+  </ul>
+  </ul>
+
+
+              <!-- manage Subscription -->
+    <h3 id="2-role-based-access-control-rbac-">1.1 Manage Subscription</h3><br>
+    <ul>
+      <li>	Organizations often use multiple Azure subscriptions to avoid per-subscription resource limits 
+        and to better manage and govern their Azure resources. It's important to define a strategy for scaling your subscriptions. </li>
+        <li>You can also select the Subscription ID under Subscriptions drop-down lists.</li>
+        <li>Admin can switch subscription in edit user tab under User Administration provided he is part of 2 subs.</li>
+        <li>Resources will be displayed according to the subscription allotment.</li>
+    </ul>
+    <br>
+    <h5><p><strong>To Add new Subscription.</strong></p></h5><br>
+    <ol>
+      <li>Select on <strong>Manage Subscription </strong> </li>
+      <br>
+   <p><img src="https://user-images.githubusercontent.com/87083633/185384793-1fab6855-b9ef-4eb2-8b1c-60fceee449c6.png" alt="image"></p>
+  <br>
+ 
+  <li>Select <strong><em>+New</em></strong> &gt; Enter the details &gt;  <strong><em>Save</em></strong> </li><br>
+    <p><img src="https://user-images.githubusercontent.com/87083633/185851557-f5771c99-d25d-4122-965e-0bcb3c02b1f0.png " alt="image"></p><br>
+  </ol>
+
+    <h5><p><strong>To Update and Delete the Subscription.</strong></p></h5><br>
+    <ul>
+      <li>Select on <strong>Manage Subscription </strong> </li>
+      <br>
+   <p><img src="https://user-images.githubusercontent.com/87083633/185384793-1fab6855-b9ef-4eb2-8b1c-60fceee449c6.png" alt="image"></p>
+  <br>
+    </ul>
+    <ul>
+    <h6><p><strong>To Update the Subscription.</strong></p></h6><br>
+
+    <ol>
+      <li>Select the Subscription Id from the drop down menu &gt; Update the details &gt; <strong><em>Update</em></strong> </li><br>
+      <br>
+   <p><img src="https://user-images.githubusercontent.com/87083633/199925890-bd211854-9cc3-45f3-b37d-df311423063c.png" alt="image"></p>
+  <br>
+    </ol>
+  </ul>
+    <br>
+    <h6><p><strong>To Delete the Subscription.</strong></p></h6><br>
+<ul>
+  <ol>
+    <li>Select the Subscription Id from the drop down menu  &gt;  <strong><em>Delete</em></strong> </li><br>
+    <br>
+ <p><img src="https://user-images.githubusercontent.com/87083633/199925678-9c348fc1-054a-4b49-b848-ed56952c7a76.png" alt="image"></p>
+<br>
+  </ol>
+</ul>
+    <br>
+    <h5 id="_note_-"><em><b><u>Note :</u></b></em></h5>
+    <ul>
+      <li><b>Azure Subsciption ID: </b> The subscription ID is a GUID that uniquely identifies your subscription to use Azure services.  </li>
+      <li><b>Azure Client ID: </b> The Client ID is a public identifier of your application.</li>
+      <li><b>Azure Client Secret: </b>The client secret is the password of the service principal. </li>
+      <li><b>Azure Object Id: </b>ObjectId will be a unique value for application object and each of the service principal. This uniquely identifies the object in Azure AD.</li>
+
+<br>
+    </ul>
+ 
+  
+                      <!--RBAC-->
+                      
+   <h3 id="2-role-based-access-control-rbac-">1.2  Role Based Access Control (RBAC)</h3><br>
+   <ul>
+   <li>RBAC facilitates to configure role assignments that maps specific user to a specific scope item to perform authorized actions. By enabling RBAC, particular access will be granted to the end users to execute authorized actions. </li>
+   <li>Roles that have been configured are listed below:</li>
+   </ul>
+  
+   <br>
+   <table>
+   <thead>
+   <tr>
+   <th>Sr. no</th>
+   <th>Role</th>
+   <th>Resource Creation Scope</th>
+   </tr>
+   </thead>
+   <tbody>
+   <tr>
+   <td>1.</td>
+   <td>Admin</td>
+   <td>User Management</td>
+   </tr>
+   <tr>
+   <td></td>
+   <td></td>
+   <td>Change Subscription</td>
+   </tr>
+   <tr>
+   <td></td>
+   <td></td>
+   <td>Add/Modify Service Principle</td>
+   </tr>
+   <tr>
+   <td></td>
+   <td></td>
+   <td>List of Compute Resources creation is as listed below:</td>
+   </tr>
+   <tr>
+   <td></td>
+   <td></td>
+   <td>o    Alert rule for monitor</td>
+   </tr>
+   <tr>
+   <td></td>
+   <td></td>
+   <td>o    SQL Server.</td>
+   </tr>
+   <tr>
+   <td></td>
+   <td></td>
+   <td>o    Database.</td>
+   </tr>
+   <tr>
+   <td></td>
+   <td></td>
+   <td>o    Key Vaults.</td>
+   </tr>
+   <tr>
+   <td></td>
+   <td></td>
+   <td>o    Manage App Service.</td>
+   </tr>
+   <tr>
+   <td></td>
+   <td></td>
+   <td>o    Deploy new Service.</td>
+   </tr>
+   <tr>
+   <td></td>
+   <td></td>
+   <td>o    AKS Cluster.</td>
+   </tr>
+   <tr>
+   <td></td>
+   <td></td>
+   <td>o     Populate Container Registries with images.</td>
+   </tr>
+   <tr>
+   <td></td>
+   <td></td>
+   <td>o    Deploy App in AKS.</td>
+   </tr>
+   <tr>
+   <td></td>
+   <td></td>
+   <td>o     Virtual Network.</td>
+   </tr>
+   <tr>
+   <td></td>
+   <td></td>
+   <td>o     Network Security Group.</td>
+   </tr>
+   <tr>
+   <td></td>
+   <td></td>
+   <td>o     Storage Account.</td>
+   </tr>
+   <tr>
+   <td></td>
+   <td></td>
+   <td>o     Manage Virtual Machine.</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td></td>
+    <td>o     Azure DevOPs.</td>
+    </tr>
+   <tr>
+   <td>2.</td>
+   <td>Operator</td>
+   <td>Except User Management, Change Configuration (Subscription, Service Principle). All Resource Creation as Admin.</td>
+   </tr>
+   <tr>
+   <td>3.</td>
+   <td>Auditor</td>
+   <td>Read only access to all resources, configurations &amp; users.</td>
+   </tr>
+   </tbody>
+   </table>
+  <br><br><br>
+                    <!--ADMIN UILITY LOGIN-->
+  
+   <h4 id="-1-2-the-utility-admin-login-">1.3 The Utility Admin Login</h4> <br>
+   
+   <ol>
+   <li>To access the admin interface, enter the admin credentials and click the Login button. <br>
+    <ul>
+      <li>An admin&#39;s login is depicted in the figure below. </li>
+    </ul>
+     
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/199900980-026e6a42-92e0-4734-84fe-0f7ea99da3f2.png" alt="image" class="centre" ></p>
+    
+   </li>
+  <br>
+   <li>After login, landing page displays 3 tiles: Security & Monitoring Services, PaaS, IaaS and drop-down lists on the top right-corner.</li>
+  <p><br><img src="https://user-images.githubusercontent.com/87083633/199899608-ae8c6b38-d5bc-45ea-93fa-36dbf256960a.png" class="centre" alt="image"></p>
+  
+   <ul>
+   <li><p>In <strong>Users</strong>&nbsp;  <img src="https://user-images.githubusercontent.com/87083633/174592814-6552b6cf-b75b-40ad-873f-2b0187825916.png" alt="image">  icon drop down menu, you can Change password and can logout from the utility.</p>
+   <p><br><img class="centresmall" src="https://user-images.githubusercontent.com/87083633/185383638-a0a72311-fbcf-485f-9863-bcc6605f9410.png" alt="image"></p>
+   </li>
+   <br>
+   <li><p>In <strong>Settings</strong>&nbsp; <img src="https://user-images.githubusercontent.com/87083633/174592982-5e36fe11-5880-4f6c-81e0-f6686a73198c.png" alt="image">          drop down menu, you can Manage Subscription and manage users. </p>
+   <p><br><img class="centresmall" src="https://user-images.githubusercontent.com/87083633/185383181-6ab284fd-fd46-4ba0-a894-614351deb99f.png" alt="image"></p>
+  
+   </li>
+   </ul>
+  <br>
+   <li><p>To add or modify <strong>Subscription</strong>, you need to click on <strong><em>Switch Subscription</em></strong> option.</p>
+   <p><br><img class="centre" src="https://user-images.githubusercontent.com/87083633/199926459-58132161-dad8-41b3-8fbd-27ed281495f7.png" alt="image"></p>
+   </li>
+  <br>
+   <li>You can Change the password by clicking on <strong><em>Change Password</em></strong>.</li>
+   <br>
+   <h5 id="_note_-"><em><b><u>Note :</u></b></em></h5>
+   <ul>
+   <li><p>Password must be at least 8 characters long (It should have at least 1 uppercase and 1 special characters).</p>
+  
+   </li>
+   </ul>
+   <li><p>User Management</p>
+   <p>Click on the <strong><em>Settings icon </em></strong>  <img src="https://user-images.githubusercontent.com/87083633/174593760-a388b00b-614e-44cd-b232-60f6c8470677.png" alt="image">  on the top right pane of the page. Click User Administration. 
+   This will open the User Management page that lists the detailed information pertinent to RBAC. You can <strong><em>add</em></strong>&nbsp; <img src="https://user-images.githubusercontent.com/87083633/175814629-48b5ff9c-acd2-45a5-b7cb-6697f53af9e4.png" alt="image"> ,<strong><em>edit</em></strong>  &nbsp; <img src="https://user-images.githubusercontent.com/87083633/175814753-4cd93926-d05d-435f-a4b9-c321ec8dff5f.png" alt="image">  and <strong><em>delete</em></strong> &nbsp; <img src="https://user-images.githubusercontent.com/87083633/175814795-25951b3e-53dc-475d-8d44-49bbc6815777.png" alt="image"> users.</p>
+   <br>
+   <p><img  class="centresmall" src="https://user-images.githubusercontent.com/87083633/175502783-2d82eea9-9c7d-451c-aa10-c694481d963e.png" alt="image"></p>
+   </li>
+  
+  <br><br><br>
+  </ol>
+   <h3 id="resources-creation-is-elaborated-from-here-on-for-which-one-must-be-part-of-either-admin-or-operator-role-">Resources creation is elaborated from here on for which one must be part of either Admin or Operator role.</h3>
+  <br><br>
+  
+  
+                    <!--RESOURCE GROUP-->
+  
+   <h4 id="-1-3-resource-group-">1.4  Resource Group</h4> <br>
+   <ul>
+   <li>A Resource Group is a container that holds related resources for an Azure solution. The Resource Group can include all the resources for the solution, or only those resources that user wants to manage as a group. 
+  </li>
+  <br>
+  <h5 id="_note_-"><em><b><u>Note :</u></b></em></h5>
+   <ul>
+   <li><p>In each card you will get an opportunity to create resource group if needed.</p>
+  
+   </li>
+  </ul>
+   </ul>
+   <br>
+  
+   <h5><p><strong>Create Resource Group</strong></p></h5>
+  <br>
+   <ol>
+   <li><p>Select any AZX service that you want to use and click on <strong>Create New</strong>.</p>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/174595477-09c01d38-1f47-42da-84e4-a66c0d6121e0.png" alt="image"></p>
+   </li>
+   <br>
+   <li><p>Provide the following information:</p>
+   <ul>
+   <li><strong>Name</strong>: Enter Resource Group name.  <br>
+   Ex: AzxdevtestIndia.</li>
+   <li><strong>Region</strong>: Select an Azure location.   <br>
+   Ex: eastus or centralus or westcentralus or northcentralus or southcentralus  etc.</li>
+   </ul>
+   <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/174595234-133906bd-f9d7-4e50-b628-3707b6e2a5e5.png" alt="image"></p>
+   </li>
+   <br>
+   <li><p>Select <strong><em>Create</em></strong>.</p></li>
+   </ol>
+   <br><br>
+  
+  
+                        <!--SAAS-->
+   <h3 id="-2-saas-software-as-a-service-">2.Security & Monitoring Services</h3> <br>
+   <ul>
+   <li><p>Security & Monitoring Services allows you to connect to and use cloud-based apps over the Internet. When you are implementing a Security & Monitoring Services solution, you are responsible for configuring the Security & Monitoring Services solution. </p>
+   </li>
+   <li><p>Services which are provided by AZX under Security & Monitoring Services are: <strong>Monitor</strong> and <strong>Policy</strong>.</p>
+   </li>
+   </ul>
+   <br>
+  
+                        <!-- MONITOR-->
+   <h4  id="-2-1-monitor-">2.1    Monitor</h4> 
+   <ul><br>
+   <li><p>Azure Monitor helps you maximize the availability and performance of AKS application and services. It delivers a comprehensive solution for collecting, analyzing, and acting on telemetry from your Azure cloud environments.</p>
+   </li>
+   <li><p>Alert Rule Sets for <strong>AKS Cluster</strong> monitoring is as shown below:</p>
+  
+   </li>
+   </ul>
+   <br>
+   <p><img src="https://user-images.githubusercontent.com/87083633/174595658-6bd8ac5a-6ba5-42f9-a3a2-f89dcde7f2ca.png" alt="image"></p>
+   <br>
+   <ul>
+   <li><p>After selecting the Resource Group &amp; AKS Cluster from the respective drop-down list then the values displayed are the Alert Name, Description, Condition, Target Resource, Actiongroup Name.</p>
+  
+   </li>
+   </ul>
+   <h5><p><strong>Create New Alert Rule Set</strong></p></h5>
+  <br>
+   <ol>
+   <li>Select <strong>Security & Monitoring Services tile</strong> &gt; <strong>Monitor</strong>.</li>
+   <br>
+  
+   <p> <br> <img src="https://user-images.githubusercontent.com/87083633/191473859-f7a277cb-3f63-4b78-8aab-23cee8ac2b81.png" alt="image"></p>
+   <br>
+  
+   <li>Under Monitor Section<ul>
+   <li>Select <strong>Resource Group</strong> &gt; <strong>AKS Cluster</strong> &gt; <strong><em>+New Alert Rule</em></strong>.</li>
+   </ul>
+   </li>
+  
+   <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/191475394-2c6aec2f-70f9-44c5-a92f-98b532cea113.png" alt="image"></p>
+   <br>
+  
+   <li><p><strong>Action Group</strong> &gt; select value from pull down menu or <strong><em>+Action Group</em></strong>.</p>
+   
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/174598374-f28df673-d088-4272-8a94-00b501ae4701.png" alt="image"></p>
+   </li>
+  
+   <br>
+   
+   <li>Provide the required information.</li>
+  
+   <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/174598461-1f8425e9-6a53-448d-a1be-e1544182534b.png" alt="image"></p>
+   <br>
+   <li>Select <strong><em>Create</em></strong> button.</li>
+   </ol>
+   <br><br>
+  
+  
+                         <!--POLICY-->
+  
+   <h4 id="-2-2-policy-">2.2  Policy</h4><br>
+   <ul>
+   <li>The three policy initiative types used in AZX are listed below:</li>
+   </ul>
+   <br>
+   <table>
+   <thead>
+   <tr>
+   <th style="text-align:center">Policy Name</th>
+   <th style="text-align:center">Policy Version</th>
+   <th style="text-align:center">Policy Description</th>
+   </tr>
+   </thead>
+   <tbody>
+   <tr>
+   <td style="text-align:center">ISO</td>
+   <td style="text-align:center">ISO 27001:2013</td>
+   <td style="text-align:center">It enables organizations of any kind to manage the security of assets such as financial   information, intellectual property, employee details or information entrusted by third parties.</td>
+   </tr>
+   <tr>
+   <td style="text-align:center">NIST</td>
+   <td style="text-align:center">NIST SP 800-53 Rev. 5</td>
+   <td style="text-align:center">This publication establishes controls for systems and organizations. The controls can be implemented within any organization or system that processes, stores, or transmits information. The use of these controls is mandatory for federal information systems.</td>
+   </tr>
+   <tr>
+   <!-- <td style="text-align:center"></td> -->
+   <td style="text-align:center">NIST</td>
+   <td style="text-align:center">NIST SP 800-53 Rev. 4</td>
+   <td style="text-align:center">This publication provides a catalog of security and privacy controls for federal information systems and organizations and a process for selecting controls to protect organizational operations organizational assets, individuals, other organizations, and the Nation from a diverse set of threats.</td>
+   </tr>
+   <tr>
+   <td style="text-align:center">PCI</td>
+   <td style="text-align:center">PCI v3.2.1:2018</td>
+   <td style="text-align:center">The PCI DSS applies to all entities that store, process, and/or transmit cardholder data. It covers technical and operational system components included in or connected to cardholder data. If you accept or process payment cards, PCI DSS applies to you.</td>
+   </tr>
+   </tbody>
+   </table>
+   <br><br>
+   <ul>
+   <li><p>In AZX Policy initiatives are assigned and displayed accordingly.</p>
+   </li>
+   <li><p>Policy initiatives Assignment Summary  is as shown below:</p>
+   </li>
+   </ul>
+  
+   <p> <br> <img src="https://user-images.githubusercontent.com/87083633/174598622-c1652e6b-84e5-4af0-b0c8-82a2a87d1fac.png" alt="image"></p>
+  <br>
+   <ul>
+   <li>You need to select either of three Policy Initiatives,Version and Resource Group from the respective drop downs to associate with the Resource Group.</li>
+   <li>If you want to assign then click on <strong><em>Assign Policy Initiatives</em></strong>.</li>
+   </ul>
+   <br>
+   <h5 id="_note_-"><em><b><u>Note :</u></b></em></h5>
+   <ul>
+   <li>Since you need to provide managed identity while assigning policy initiative ,  we have set the default value in backend for location as &quot;centralindia&quot; and identity type as &quot;SystemAssigned&quot;.</li>
+   <li>Also By default, enforcement mode is assigned to no enforcement.</li>
+   </ul>
+   
+  
+                        <!--PAAS-->
+   <br><br>
+   <h3 id="-3-paas-platform-as-a-service-">3.PaaS (Platform as a Service)</h3>
+  <br>
+  
+  
+                          <!--SQL DATABASE-->
+  
+   <h4 id="-3-1-sql-database-">3.1 SQL Database</h4><br>
+  
+   <p>•  Azure SQL Database is a fully managed platform as a service (PaaS) database engine.</p>
+  <br>
+   <p><img src="https://user-images.githubusercontent.com/87083633/174598999-6b690597-aebf-462f-99a9-4877cad603cc.png" alt="image"></p>
+   <h5><p><strong>Create SQL Database</strong></p></h5>
+   <br>
+   <ol>
+   <li><p>Select <strong>PaaS tile</strong> &gt; <strong>SQL Database</strong>.</p>
+    <br>
+    <p> <img src="https://user-images.githubusercontent.com/87083633/191477175-b8b8f55f-e2c6-4beb-a1b1-0b237d5b57e0.png" alt="image"></p>
+   </li>
+   <br>
+   <li>Select the <strong>Resource Group</strong> &gt; <strong>SQL Server</strong> &gt; <strong><em>+SQL DATABASE</em></strong>.</li>
+   <br>
+   <p> <br><img src="https://user-images.githubusercontent.com/87083633/191481348-dcc94813-1a1b-411c-a929-3f3cd5327640.png" alt="image"></p>
+  <br>
+   <li><p>Provide the information.</p> <br>
+   <p><img src="https://user-images.githubusercontent.com/87083633/174599284-afcea659-92b4-4c2c-8cd7-bf2855d9edc2.png" alt="image"></p>
+   </li>
+  
+   <li>Select <strong><em>Create</em></strong>.</li>
+  
+   </ol>
+  
+                              <!--SQL SERVER-->
+  
+  <br>
+   <h4 id="-3-1-1-sql-server-">3.1.1 SQL Server</h4>
+  <br>
+   <h5><p><strong>Create SQL Server</strong></p></h5>
+   <ol>
+   <li>Select <strong>SQL Server</strong> or <strong><em>Create New</em></strong>. </li>
+  <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/191480810-34131391-bc77-4119-b39a-3554825b5650.png" alt="image"></p>
+  
+   <br>
+   <li>Provide the information.</li><br>
+  
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/174601076-5c109604-e829-47de-87b1-205837a45910.png" alt="image"></p>
+  
+ 
+   <li><p>Select <strong><em>Create</em></strong>. 
+    <br>
+    •  To delete SQL Database.</p>
+   <p>Select Action &gt;  <img src="https://user-images.githubusercontent.com/87083633/174601280-c8ca0a8b-ee7c-408b-ad74-71f0b66cf41d.png" alt="image"></p>
+   </li>
+   </ol>
+   <br>
+  
+                        <!--KEY VAULT-->
+  
+   <h4 id="-3-2-key-vaults-">3.2 Key Vaults</h4><br>
+  
+   <ul>
+   <li><p>Azure Key Vault is a cloud service for securely storing and accessing secrets. A secret is anything that you    want to tightly control access to, such as API keys, passwords, certificates, or cryptographic keys.</p>
+   </li>
+   <li><p><strong>Secrets Management</strong> - Azure Key Vault can be used to securely store and tightly control access to tokens, passwords, certificates, API keys, and other secrets.</p>
+   </li>
+   <li><p><strong>Key Management</strong> - Azure Key Vault can be used as a Key Management solution. Azure Key Vault makes it easy to create and control the encryption keys used to encrypt your data.</p>
+   </li>
+   <li><p><strong>Certificate Management</strong> - Azure Key Vault lets you easily provision, manage, and deploy public and private Transport Layer Security/Secure Sockets Layer (TLS/SSL) certificates for use with Azure and your internal connected resources.</p>
+   </li>
+   </ul>
+   <br>
+   <h5><p><strong>Create Key Vault</strong> </p></h5><br>
+   <ol>
+   <li><p>Select <strong>IaaS tile</strong> &gt; <strong>Key Vault</strong>.</p>
+   <p> <br><img src="https://user-images.githubusercontent.com/87083633/191493945-a1757f4d-a9ab-4e43-bd1b-a1b0e30c935c.png" alt="image"></p>
+   </li>
+   <br>
+  
+  <li><p>Select <strong>Resource Group</strong>  &gt; <strong><em>+Key Vault</em></strong>.</p>
+   <p> <br><img src="https://user-images.githubusercontent.com/87083633/191495010-2ca8a2e6-e417-449d-af15-77ca5a9d1173.png" alt="image"></p>
+   </li>
+  
+   <br>
+  
+   <li><p>Provide the information.</p>
+   <p> <br><img src="https://user-images.githubusercontent.com/87083633/174601657-1bf0cb5f-55f1-4969-aca9-524b93728854.png" alt="image"></p>
+   </li>
+   <br>
+   <li>Select <strong><em>Create</em></strong>.</li>
+  </ol>
+  
+           <!--KEY VAULT -- ADDING KEY-->
+  
+  <br>
+   <h5><p> <strong>Adding key</strong>:</p></h5>
+   <br>
+  <ol>
+   <li>Select <strong>Resource Group</strong> &gt; Action &gt; <strong><em>Keys</em></strong>.</li>
+   <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/199960991-a16b1b82-1302-4259-84f3-65d1e7d00715.png" alt="image"></p>
+   <br>
+   <li>Select <strong><em>+New</em></strong> &gt; Provide the information &gt; <strong><em>Add</em></strong>.  </li>
+  <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/199963145-b33762cc-8783-425b-896e-51ad232a0dbe.png" alt="image"></p>
+  </ol>
+  
+                 <!--KEY VAULT -- ADDING SECRETS-->
+  <br>
+   <h5><p><strong>Adding secrets</strong>:</p></h5>
+   <br>
+   <ol>
+
+   <li>Select <strong>Resource Group</strong> &gt; Action &gt; <strong><em>Secrets</em></strong>.</li>
+  <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/199961473-338e9448-c388-4895-b22a-fd2d11a05c05.png" alt="image"></p>
+   <br>
+   <li><p>Select <strong><em>+New</em></strong> &gt; Provide the information &gt; <strong><em>Add</em></strong>.</p>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/193013927-2334feed-1f10-4240-91ed-8a298bf1d815.png" alt="image"></p>
+   <br>
+   </li>
+   </ol>
+  
+                  <!--KEY VAULT -- ADDING CERTIFICATE-->
+  
+  <br>
+   <h5><p><strong>Adding Certificate</strong>:</p></h5>
+   <br>
+   <ol>
+   <li>Select Resource Group &gt; Action &gt; <strong><em>Certificate</em></strong>.</li>
+   <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/199962248-f6e05d60-186e-4e96-abd9-693afa3bd008.png" alt="image"></p>
+   <br>
+   <li><p>Select <strong><em>+New</em></strong> &gt; Provide the information &gt; <strong><em>Add</em></strong>.</p>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/194482950-0ae7417b-15a9-418d-bdde-c657e99b0fc6.png" alt="image"></p>
+   <ul>
+   <li>When you click on Delete key vault, key vault gets deleted and along with-it keys, secrets and certificates also get deleted automatically.</li>
+   </ul>
+   </li>
+   </ol>
+  
+                      <!--APP SERVICE-->
+   <br>
+   <h4 id="-3-3-app-services-">3.3    App Deploy Services</h4><br>
+  <ul>
+   <li><p>Azure App Service is a fully managed platform as a service (PaaS) offering for developers.</p></li><br>
+  </ul>
+   <h4 id="3-3-1-app-service">3.3.1    App service</h4><br>
+   <ul>
+   <li>Azure App Service enables you to build and host web apps, mobile back ends, and RESTful APIs in the programming language of your choice without managing infrastructure. It offers auto scaling and high availability, supports both Windows and Linux.</li>
+   <li>Dashboard of App service is as shown below:</li>
+   </ul>
+   <br>
+   <p><img src="https://user-images.githubusercontent.com/87083633/174604053-266bb61b-af31-4bae-986c-f607bee9744d.png" alt="image"></p>
+  <br>
+   <ul>
+   <li>In AZX portal you can only manage the Application Service.</li>
+   <li>You can only Start, Stop, Restart, Browse, Delete and Refresh the service.</li>
+   <li>When you click on delete the application gets deleted. </li>
+   </ul>
+   <br>
+  
+                  <!--DEPLOY SERVICE-->
+  
+   <h4 id="3-3-2-deploy-service">3.3.2 Deploy service</h4>
+   <ul>
+   <li>Azure Deploy service can deploy any file with extension:  .JSON.</li>
+   </ul>
+  <br>
+   <h5><p><strong>Deploy service</strong></p></h5>
+   <ol>
+    <br>
+   <li>Select <strong>PaaS tile</strong> &gt; <strong>App Service</strong> &gt; <strong>Deploy Service</strong>.</li>
+   <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/191496442-f741c010-f5e3-4ad5-8d56-21c47dbdaea7.png" alt="image"></p>
+   <br>
+   <li>Select <strong>Resource Group</strong> or <strong><em>Create New</em></strong> &gt; <strong><em>Upload file (extension can be . JSON (ARM Template))</em></strong>.</li>
+  
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/174604808-4fb6f57e-39b4-4884-ae3f-43ca6bedb4fa.png" alt="image"></p>
+   <h5 id="_note_-"><em><b><u>Note :</u></b></em></h5>
+   <ul>
+    <li>Single .json file must be selected with maximum of size 5MB</li>
+ 
+   </ul>
+  </ol>
+  <br>
+
+                               <!--CONTAINER SERVICE-->
+
+
+   <h4 id="3-4-container-services">3.4    Container Services</h4><br>
+   <ul>
+    <li><p>Containers are becoming the preferred way to package, deploy, and manage cloud applications. Azure Container Instances offers the fastest and simplest way to run a container in Azure, without having to manage any virtual machines and without having to adopt a higher-level service.</p></li>
+   </ul>
+   
+   <br>
+   <h4 id="3-4-1-aks-cluster-deployment">3.4.1    AKS Cluster Deployment</h4> <br>
+   <ul>
+    <li><p>  Azure Kubernetes Service (AKS) simplifies deploying a managed Kubernetes cluster in Azure by offloading the operational overhead to Azure. As a hosted Kubernetes service, Azure handles critical tasks, like health monitoring and maintenance.</p></li>
+   </ul>
+   
+  
+   <br>
+
+   <h5><p><strong>Create AKS Cluster</strong></p></h5>
+   <br>
+   <ol>
+   <li>Select <strong>PaaS tile</strong>  &gt; <strong>Container Service</strong>  &gt; <strong>AKS Cluster Deployment</strong>.</li>
+   <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/191497884-c4a76fae-e856-4673-ba0e-52a760692003.png" alt="image"></p>
+   <br>
+  
+   <li>Select <strong>Resource Group</strong>  &gt; <strong><em>+AKS Cluster</em></strong>. </li>
+   <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/191505433-adf95c27-7702-4c2e-aa22-9e743f019199.png" alt="image"></p>
+  
+   <br>
+   <li>Provide the information&gt; select <strong><em>Deploy</em></strong>.</li>
+   <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/193006297-1d631142-bed3-4bd3-9bd2-a747cbb92423.png " alt="image"></p>
+   <br>
+   <h5 id="_note_-"><em><b><u>Note :</u></b></em></h5>
+   <ul>
+   <li>If you select Agent Pool Mode as System, then OS type available is Linux and if you selects Agent 
+   Pool Type as User then OS type available are Linux and Windows.</li>
+   <li>Disk Size should vary from 30 to 2048.</li>
+   <li>Max Pod Count should be from 30 to 250.</li>
+   </ul>
+  
+  
+   </ol>
+   <br>
+  <h5><p><strong>Node Details</strong>:</p></h5> 
+   <ol>
+    <br>
+   <li>Select <strong>Resource Group</strong> &gt; <strong><em>Info</em></strong> icon    .</li>
+  <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/199691459-c2e1b943-e8e9-4091-bd70-f1c6201cead6.png" alt="image"></p>
+  
+   <br>
+   <li>Select <strong><em>+Node pool</em></strong>.</li>
+   <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/174609601-82d41bf6-dc47-48b8-94ac-908a692dcfae.png" alt="image"></p>
+  
+   <br>
+   <li>Provide the information &gt; <strong><em>Add</em></strong>.</li>
+   <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/191505954-bfcd9c33-e7e7-4a40-b971-249de3567443.png" alt="image"></p>
+   <br>
+   </ol>
+   <h5 id="_note_-"><em><b><u>Note :</u></b></em></h5>
+   <ul>
+   <li>Pool Name should have only lowercase letters.</li>
+   <li>If you select OS Type is Linux, the Pool Name can have maximum 12 characters and if OS Type is Windows, the Pool Name can have maximum 6 characters</li>
+   <li>Disk Size should vary from 30 to 2048.</li>
+   <li>Max Pod Count should be from 30 to 250.</li>
+  
+ 
+   </ul>
+   <br>
+   <h5><p><strong>Scale Node</strong>:</p></h5> 
+   <br>
+   <ol>
+   <li>Select
+   Action &gt; <strong><em>Scale Node</em></strong> icon.</li>
+   <br>
+   <p><img src="https://user-images.githubusercontent.com/87083633/174610361-bc78ee95-0eb3-4351-bc6e-10d6a552292b.png" alt="image"></p>
+   <br>
+ 
+   <li><p>Provide the information &gt; <strong><em>Confirm</em></strong>.</p>
+    <br>
+   <p><img src="https://user-images.githubusercontent.com/87083633/174610777-351d257a-17b3-4998-abe0-c6434d8c867c.png" alt="image"></p>
+   </li>
+   <br>
+   
+   </ol>
+   <br>
+   <h5><p><strong>Action Menu</strong>:</p></h5><br>
+   <ul>
+      <h5 id="_note_-"><em><b><u>Note :</u></b></em></h5>
+      <ul>
+          <li>Action options visiblity</li> 
+          <ol>
+              <li> The <b><i>Status</i></b>  should always be Succeeded and if <b><i>Power State</i></b> is Stopped then only start option 
+                  is visible and if <b><i>Power State</i></b> is Running then Stop option,Upgrade Kubernetes 
+                  version and Kubernetes Dashboard options are visible.</li>
+                  <br>
+   <p><img src="https://user-images.githubusercontent.com/87083633/199690584-5e01eade-b2cd-4661-a844-c6339d89ccd4.png" alt="image"></p>
+
+          </ol>
+          
+      </ul>
+   </ul>
+
+   <ol>
+   <h5><p><strong>Upgrade Kubernetes version</strong>:</p></h5><br>
+   <ol>
+   <li><p>Select <strong>Resource Group</strong> &gt; Action &gt;  <strong><em>Upgrade Kubernetes version</em></strong> icon.</p>
+    <br>
+   <p><img src="https://user-images.githubusercontent.com/87083633/199692556-54bc991f-ac17-4197-98cf-5a625cbd53f2.png" alt="image"></p>
+  
+   </li><br>
+   <li><p>Provide the information &gt; <strong><em>Upgrade</em></strong>.</p>
+    <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/194483604-195cc201-f9ac-4243-bb50-feda7a7ac3a8.png" alt="image"></p>
+   </li>
+   </ol>
+   <br>
+   <h5><p><strong>Kubernetes Dashboard</strong>:</p></h5><br>
+   <ol>
+   <li>Select <strong>Resource Group</strong> &gt; <strong><em>Kubernetes Dashboard</em></strong>.     </li><br>
+
+   <p><img src="https://user-images.githubusercontent.com/87083633/199692236-14211419-d28c-417c-a1c2-843a22621c87.png" alt="image"></p>
+   
+   <br>
+   <li><p>Select Copy Token &gt; <strong><em>Go to Dashboard</em></strong>.</p><br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/174723035-566a28d0-5427-4aaa-ab3f-037d49f1c1ec.png" alt="image"></p>
+   </li>
+ 
+   <br>
+  
+   <li><p>Paste the token &gt; <strong><em>Sign in</em></strong>.</p><br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/174723092-57cc4c4f-2ac6-472c-b5db-79b2c8870e9c.png" alt="image"></p>
+   </li>
+   <br>
+   
+  
+   <li>You will be redirected to Kubernetes Dashboard.</li>
+   <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/191506532-2b99f58e-29b0-445d-a9d4-de36d944a6a2.png" alt="image"></p>
+   </ol>
+   </ol>
+   <br>
+   <ul>
+      <li><p>User can Enable and Disable Secret store CSI driver.</p>
+      </li>
+   </ul>
+<br>
+
+                                 <!--CONTAINER REGISTRY-->
+
+   <h4 id="3-4-2-container-registries">3.4.2.  Container Registries</h4><br>
+   <ul>
+   <li>Azure Container Registry is a managed by private Docker registry service.</li>
+   <li>It creates and maintains Azure container registries to store and manage user private Docker container images and related artifacts.</li>
+   </ul>
+   <br>
+   <h5><p><strong>Create Container Registries</strong> </p></h5><br>
+   <ol>
+   <li><p>Select <strong>PaaS tile</strong>  &gt; <strong>Container service</strong>  &gt; <strong>Container Registries Deployment</strong> .</p>
+    <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/191506887-a6e8a7f6-46b9-4278-9ed0-58abf201d1f8.png" alt="image"></p>
+  
+   </li> <br>
+   <li><p>Select <strong>Resource Group</strong> &gt; <strong><em>+Registry</em></strong>.</p>
+    <br>
+    <p> <br><img src="https://user-images.githubusercontent.com/87083633/191507241-851ac57c-9dec-4d6d-bd55-575ccafd7bb8.png" alt="image"></p>
+  
+   </li><br>
+   <li><p>Provide the information &gt; <strong><em>Create</em></strong>.</p><br>
+    <h5 id="_note_-"><em><b><u>Note :</u></b></em></h5>
+   <ul>
+   <li><p>SKU is categorized into 3 types: Basic, Premium, Standard.</p><br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/193018429-f7cf0f86-52fe-4b3f-b7aa-1d3f0f4b2068.png" alt="image"></p>
+   </li>
+   </ul>
+   </li>
+   </ol>
+   <br>
+   <h5><p><strong>Import Images</strong>:</p></h5><br>
+   <ol>
+   <li><p>Select  <strong><em>Import Images</em></strong>.</p><br>
+   <p><img src="https://user-images.githubusercontent.com/87083633/199919827-9cbf8aef-60f4-430c-9702-a84c7add760d.png" alt="image"></p>
+   <br>
+   </li>
+   <li><p>User can import image in two ways ACR to ACR and Docker hub.</p><br>
+   <!-- <p><br><img src="https://user-images.githubusercontent.com/87083633/174723838-e1d06efd-b4bd-45c2-bcca-e1dc94343348.png" alt="image"></p> -->
+   </li>
+   </ol>
+   <br>
+   <p><strong>a.    ACR TO ACR</strong></p><br>
+  
+   <ol>
+   <li><p>Provide the information &gt;  <strong><em>Import</em></strong>.</p><br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/193000782-8756c849-ca5b-40a7-bffb-36db2b3fac5a.png " alt="image"></p>
+   </li>
+   </ol>
+   <br>
+   <p><strong>b.    Docker hub</strong></p><br>
+  
+   <ol>
+   <li><p>Provide the information &gt; <strong><em>Import</em></strong>.</p><br>
+   <p><img src="https://user-images.githubusercontent.com/87083633/193002593-1ec0248e-312c-4c3a-99c7-3b9168f2314e.png" alt="image"></p>
+   </li><br>
+   <li><p>When you click on delete ACR gets deleted.</p>
+   </li>
+   </ol>
+<br>
+<h5><p><strong>Repository Details </strong>:</p></h5><br>
+<ol>
+  <li>Select <strong>Resource Group</strong> &gt; <strong><em>Info</em></strong> icon    .</li>
+  <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/199904978-9341c975-32ab-4490-bd6b-8576587402a7.png" alt="image"></p>
+  
+   <br>
+   <li>To Show Tags. </li>
+   <p>Select <strong><em>Show Tags</em></strong> .</p>
+   <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/199919657-f649021e-3893-448b-8ae7-bc02bead4f4c.png" alt="image"></p>
+<br>
+   <li> To delete Tag.</li>
+   <p>Select   <img src="https://user-images.githubusercontent.com/87083633/174601280-c8ca0a8b-ee7c-408b-ad74-71f0b66cf41d.png" alt="image"> </p>
+</ol>
+   <br>
+
+                                          <!-- AKS App Deployment -->
+
+
+   <h4>3.4.3      AKS App Deployment</h4><br>
+   <ul>
+    <li><p> Azure Kubernetes Service (AKS) is a managed Kubernetes service that lets you quickly deploy.</p><br></li>
+   </ul>
+  
+  <h5><p><strong>Deploying details</strong> </p></h5><br>
+
+   <ol>
+   <li><p>Select <strong>PaaS tile</strong> &gt; <strong>Container service</strong> &gt; <strong>AKS App Deployment</strong>.</p><br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/191507458-dd5d8afa-851a-4da2-8968-4d89c582603a.png" alt="image"></p>
+  
+   </li>
+   <br>
+   <li><p>Select &gt; <strong>Resource Group</strong>  &gt; <strong>AKS Cluster</strong> &gt; <strong>import file</strong>(.YAML,.YML) &gt; <strong><em>Deploy Service</em></strong>.</p>
+   <p><img src="https://user-images.githubusercontent.com/87083633/196660737-8c6ecf0a-7904-49b7-b616-dcc37b434bbd.png" alt="image">    </p>
+   </li>
+   <h5 id="_note_-"><em><b><u>Note :</u></b></em></h5>
+   <ul>
+    <li>Single .yml or .yaml file must be selected</li> 
+   </ul>
+   </ol>
+   <br>
+
+                                       <!-- IaaS (Infrastructure as a Service) -->
+
+
+   <h3 id="4-iaas-infrastructure-as-a-service-">4.    IaaS (Infrastructure as a Service)</h3><br>
+   <h4 id="4-1-virtual-network">4.1    Virtual Network</h4><br>
+   <ul>
+   <li>Azure Virtual Network (VNet) is the fundamental building block for user private network in Azure. VNet enables many types of Azure resources, such as Azure Virtual Machines (VM), to securely communicate with each other, the internet and on-premises networks.</li>
+   <li>Azure virtual network enables Azure resources to securely communicate with each other, the internet, and on-premises networks. Key scenarios that user can accomplish with a virtual network include - communication of Azure resources with the internet, communication between Azure resources, communication with on-premises resources, filtering network traffic, routing network traffic, and integration with Azure services.</li>
+   <li>After clicking in IaaS tile of landing zone, Virtual Network tile is visible.</li>
+   <li>Virtual network tile is divided into two parts Virtual Network and Network Security Group.</li>
+   </ul>
+   <br>
+
+
+                                                <!-- Virtual Network -->
+
+   <h4 id="3-1-1-virtual-network">4.1.1    Virtual Network</h4>
+   <ul>
+   <li>VNet is like a traditional network that user would operate in user own data center but brings with additional benefits of Azure&#39;s infrastructure such as scale, availability, and isolation.</li>
+   </ul>
+   <br>
+   <h5><p><strong>Create Virtual Network</strong></p></h5>
+   <br>
+   <ol>
+   <li><p>Select <strong>IaaS tile</strong> &gt;<strong>Virtual Network</strong> &gt; <strong>Virtual Network</strong>.</p>  <br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/191248901-f81850cc-0614-4fc8-9514-e56b46268c5e.png" alt="image"></p>
+   <br>
+   </li>
+   <li><p>Select <strong>Resource Group</strong>  &gt; <strong><em>+Vnet</em></strong>.</p><br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/191508094-f84c6de7-485e-4bcc-bfc8-fe84f6c22afa.png" alt="image"></p>
+  
+   </li>
+   <br>
+   <li><p>Provide the information &gt; <strong><em>+Add Subnet</em></strong>.</p><br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/191508632-119b6975-dcab-45b6-9120-740b8db52315.png" alt="image"></p>
+  
+   </li>
+   <br>
+   <li><p>Provide the information &gt; <strong><em>Add</em></strong>.</p><br>
+   </li>
+ 
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/174724426-89c4aedc-e87d-4744-ba31-06f8011ce016.png" alt="image"></p>
+
+  <br>
+   <ul>
+   <li>To delete subnet  select       <img src="https://user-images.githubusercontent.com/87083633/174601280-c8ca0a8b-ee7c-408b-ad74-71f0b66cf41d.png" alt="image"></li>
+   </ul>
+   <br>
+ 
+   <li>Select <strong><em>Create</em></strong> . </li>
+   </ol>
+   <br>
+
+   <h5 id="virtual-network-peering"><p><strong>Virtual Network Peering</strong>:</p></h5><br>
+
+  
+   <ol>
+   
+   <li>Select <strong>Resource Group</strong> &gt;  <strong>Virtual Network Name link</strong>.</li> <br>
+ 
+   <p> <br><img src="https://user-images.githubusercontent.com/87083633/191251741-4a15e8cf-d0ff-43f0-bcad-f8f955c5d7ed.png" alt="image"></p>
+  
+   <br>
+   <li><p>You can create new peer by clicking on <strong><em>New button</em></strong> and as well can <strong><em>Reload</em></strong>.</p> 
+   <p><img src="https://user-images.githubusercontent.com/87083633/174726628-29d171f5-f1c0-479b-80f5-a00f656a09a2.png" alt="image"></p>
+  
+   </li>
+   <br>
+   <li><p>Select <strong><em>New</em></strong> &gt; Provide the information &gt; <strong><em>Add</em></strong>.</p> <br>
+   </li>
+   </ol>
+   <br>
+   <h5 id="_note_-"><em><b><u>Note :</u></b></em></h5>
+   <ul>
+   <li><p>By default the value of location is us_east.</p><br>
+   <p>  <img src="https://user-images.githubusercontent.com/87083633/174726842-c39b2d75-c1d1-4c5d-9189-83e90d8b5744.png" alt="image"></p>
+  
+   </li>
+   </ul>
+   <ul>
+   <li>When you delete Vnet related Subnet gets deleted.</li>
+   <li>When you click on delete Vnet Perring gets deleted as well as there is separate option to delete Vnet peering.</li>
+   </ul>
+   <br>
+
+                                 <!-- Network Security Group -->
+  
+   <h4 id="3-1-2-network-security-group">4.1.2    Network Security Group</h4><br>
+   <ul>
+   <li>User can use an Azure network security group to filter network traffic to and from Azure resources in an Azure virtual network. A network security group contains security rules that allow or deny inbound network traffic to, or outbound network traffic from, several types of Azure resources. For each rule, user can specify source and destination, port and protocol.</li>
+   </ul>
+  <br>
+  <h5><p>  <strong>Security rules</strong>:</p></h5> <br>
+   <ul>
+   <li>A network security group contains zero, or as many rules as desire. Each rule specifies the following properties:<br>
+   <strong>Name</strong>: A unique name within the network security group.<br>
+   <strong>Priority</strong>: A number between 100 and 4096. Rules are processed in priority order, with lower numbers processed before higher numbers.<br>
+   <strong>Source or Destination Address</strong>: Any, or an individual IP address, classless inter-domain routing (CIDR) block (10.0.0.0/24, for example), service tag, or application security group. If user specify an address for an Azure resource, specify the private IP address assigned to the resource.<br>
+   <strong>Protocol</strong>: ICMP, TCP, UDP, Any.<br>
+   <strong>Source or destination port</strong>: User can specify an individual or range of ports. For example, user could specify 80 or 10000-10005. Specifying ranges enables user to create fewer security rules.<br>
+   <strong>Action</strong>: Allow or Deny</li><br>
+   </ul>
+  
+   <ul>
+   <li><p>Dashboard of Network Security Group (NSG) is as shown below:</p><br>
+   <p><img src="https://user-images.githubusercontent.com/87083633/193263380-aad567a2-52d4-4a4b-943b-c0c4989d535d.png" alt="image"></p>
+   </li>
+   </ul>
+  <br>
+  <h5><p><strong>Create Network Security Group</strong></p></h5> 
+  <br>
+   <ol>
+   <li><p>Select <strong>IaaS tile</strong> &gt; <strong>Virtual Network</strong> &gt; <strong>Network Security Group</strong>.</p><br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/191254141-0f61f79e-035e-43b3-864d-0541872825e9.png" alt="image"></p>
+   <br>
+   </li>
+   <li><p>Select <strong>Resource Group</strong> &gt; <strong><em>+NSG</em></strong>.</p><br>
+   <p><img src="https://user-images.githubusercontent.com/87083633/191512226-b0242f97-02f5-496f-ab37-1067c0ef29d0.png" alt="image"></p>
+  
+   </li>
+   <li><p>Provide <strong>NSG Name</strong> &gt;<strong>Region</strong> &gt; <strong><em>Add Rule</em></strong>.</p><br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/191688641-72cba59a-130d-4573-bea3-097a1cba3524.png" alt="image"></p>
+   <br>
+   </li>
+   <li><p>Provide the information &gt; <strong><em>Create</em></strong>.</p><br>
+    <p><br><img src="https://user-images.githubusercontent.com/87083633/191727168-27508869-2af9-4f79-9cf4-a6132fd90831.png" alt="image"></p>
+   </li>
+   </ol>
+   <h5 id="_note_-"><em><b><u>Note :</u></b></em></h5>
+   <ul>
+   <li>Name (ex: rule0, rule1) and priority are defined in backend as user creates new rule priority values increases by 1.</li>
+   <li>If user select type as Inbound then source address is 0.0.0.0/0 or *and it is public and if address is different then it is private.</li>
+   <li><p>if user select type as outbound then it is private.</p>
+
+  
+   </li>
+  </ul>
+   <br>
+  
+   <h5><p><strong>Associate Group</strong> or <strong>Disassociate Group</strong> </p></h5><br>
+   <ul>
+    <li>Select <em> <strong>Associate Group</strong></em> or <em><strong>Disassociate Group</strong></em> </li> <br>
+    <p><br><img src="https://user-images.githubusercontent.com/87083633/195269476-2e2f3dec-f0a1-4b9c-b9b7-9f8dc8dee8ae.png" alt="image"></p><br>
+    <ul>
+    <li><p>Select <strong><em>Vnet</em></strong> &gt; <strong>Subnet</strong> &gt; <strong><em>Associate or Disassociate</em></strong>.</p><br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/174727672-b5d474f5-d20a-4edc-9169-bd9d275d4127.png" alt="image"></p>
+   </li>
+  </ul>
+   </ul>
+   <br>
+   <h5><p><strong>NSG Rules</strong></p></h5><br>
+   <ul>
+    <li>Select <em><strong>NSG Rules</strong></em> .</li>
+    <p><br><img src="https://user-images.githubusercontent.com/87083633/195270099-047796bb-40b8-483d-ad72-be49aeca9528.png" alt="image"></p><br>
+    </ul>
+    <ul>
+      <li><h6><p><strong>Add NSG Rules</strong></p></h6><br></li>
+    <ol>
+      <li>Select <em><strong>+ Add Rule</strong></em>.<br>
+        <p><br><img src="https://user-images.githubusercontent.com/87083633/195273048-81a42886-5a7b-4e52-8081-289067031027.png" alt="image"></p><br>
+
+      <li>Provide information &gt; <em><strong>Add NSG Rule</strong></em>.</li><br>
+      <p><br><img src="https://user-images.githubusercontent.com/87083633/195273463-4182db79-a17f-469f-b290-f70c037ef2af.png" alt="image"></p><br>
+     </ol>
+    </ul>
+    <br>
+  <ul>
+ <li><h6><p><strong>Delete NSG Rules</strong></p></h6><br></li>
+
+    <ul>
+      <li>Select <em><strong>Delete</strong> &nbsp; <img src="https://user-images.githubusercontent.com/87083633/175814795-25951b3e-53dc-475d-8d44-49bbc6815777.png" alt="image"></em><br>
+        <p><br><img src="https://user-images.githubusercontent.com/87083633/195275460-a059ea5c-fee1-4e04-b38b-0db3d325d522.png" alt="image"></p><br>
+    </ul>
+  </ul>
+  <h5><p><strong>Associated Subnet Details:</strong></p></h5><br>
+  <ol>
+    <br>
+    <li>Select <strong>Resource Group</strong> &gt; <strong><em>Info</em></strong> icon.</li>
+    <p><br><img src="https://user-images.githubusercontent.com/87083633/199951147-712bab4f-648b-48c3-9e60-52c33c130457.png" alt="image"></p>
+   <br>
+  
+   <li><p>Associated Subnet details will get dispalyed.</p><br></li>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/199951815-6f142e21-3e4f-407e-a33e-6ff238e20263.png" alt="image"></p>
+ 
+    <br>
+
+  </ol>
+  <br>
+  
+   
+
+
+
+                                           <!-- Storage Account -->
+  <br>
+   <h4 id="3-2-storage-account">4.2    Storage Account</h4><br>
+   <ul>
+   <li>A storage account is an Azure Resource Manager. Every Resource Manager resource, including an Azure storage account, must belong to an Azure Resource Group. A Resource Group is a logical container for grouping user Azure services. </li><br>
+   <li>When user create a storage account, user have the option to either create a new Resource Group or use an existing Resource Group.</li><br>
+   <li>Dashboard for Storage account is as shown below:</li><br>
+   </ul>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/174727835-a30c8206-57ca-42ec-b698-f33aec2d7cbd.png" alt="image"></p>
+   <br>
+   <ul>
+   <li>You need to either select the Resource Group or create new Resource group, after that the table displays the Storage account name,
+   Location, storage type(Blob storage, storage,storageV2) and can delete the storage account.</li><br>
+   </ul>
+  
+   <h5><p><strong>Create Storage Account</strong></p></h5><br>
+   <ol>
+   <li><p>Select <strong>IaaS tile</strong> &gt; <strong>Storage Account</strong> .</p><br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/191727830-2386951f-d42a-4d02-a8d3-9266de7775eb.png" alt="image"></p>
+   
+   </li><br>
+   <li><p>Select <strong>Resource Group</strong>  &gt; <strong><em>+ Storage Account</em></strong>.</p>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/174728620-3e4e0a6d-d2d5-417e-8d9b-676cf4a46e4a.png" alt="image"></p>
+   </li>
+   </ol>
+   <br>
+   <ol>
+   <li>Provide the information &gt; <strong><em>Create</em></strong>.</li><br>
+   
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/174728679-5d36f7b3-30b4-457e-94b5-04556dfb358a.png" alt="image"></p>
+  </ol>
+  <ul><br>
+   <li>When you click on delete, Storage account gets deleted.</li>
+   </ul>
+   <h5 id="_note_-"><em><b><u>Note :</u></b></em></h5>
+   <ul>
+    <li>In order to provision a VM having a public IP address, the subnet in which the VM is being provisioned should be associated with NSG. Note: This NSG should at least consist a rule which allows inbound traffic at port 22 (SSH) or port 80 (HTTP) or port 3389 (RDP)</li>
+   </ul>
+   <br>
+
+                              <!-- Virtual Machine -->
+
+   <h4 id="3-3-virtual-machine">4.3    Virtual Machine</h4><br>
+   <ul>
+   <li>Azure virtual machines (VMs) can be created through the AZX. This method provides a browser-based user interface to create VMs and their associated resources.</li>
+   <li>AZX allows deployment of Virtual Machine (VM) on Azure that runs on Windows and Linux operating system.</li><br>
+   </ul>
+  
+   <h5><p><strong>Create Virtual Machine</strong></p></h5><br>
+   <ol>
+   <li><p>Select <strong>IaaS tile</strong> &gt; <strong>Virtual Machine</strong>.</p><br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/191254355-665abfdc-0bf5-4469-ab38-5cae92f81a41.png" alt="image"></p>
+  
+   </li><br>
+   <li><p>Select <strong>Resource Group</strong> &gt; <strong>Region</strong>&gt; <strong>Virtual Network</strong> &gt; <strong><em>+Virtual Machine</em></strong>.</p><br>
+   <p><img src="https://user-images.githubusercontent.com/87083633/191728640-7e8864a2-1eae-4deb-8604-253be987a6bd.png" alt="image"></p>
+  
+   </li><br>
+   <li><p>Provide the information.</p>
+   </li>
+  <br>
+    <p><br><img src="https://user-images.githubusercontent.com/87083633/191260165-589d962f-14e0-4fde-87ac-8f274d4e55a9.png" alt="image"></p>
+    <h5 id="_note_-"><em><b><u>Note :</u></b></em></h5>
+   <ul>
+   <li>If you select Image as Linux(You need to select SSH key or you can create new SSH Key).</li>
+   </ul>
+ 
+
+   
+  <br>
+ 
+   <li><p>If You want to create multiple Virtual Machines of same configuration then select <strong>_Copy current VM config</strong>.</p><br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/191260559-a06e5ba3-722a-4b01-8b36-a50822dba7a8.png" alt="image"></p>
+   </li>
+
+   <br>
+
+   <li><p>If you want to create multiple Virtual Machines of different configuration the select <strong><em>Add new VM Config</em></strong> and to Delete VM select <strong><em>Delete VM</em></strong>.</p><br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/191260807-ed0a19fe-51fc-4512-9d30-eec87516da11.png" alt="image"></p>
+  
+   </li><br>
+   <li><p>Select <strong><em>Create</em></strong>.</p>
+   </li>
+   </ol>
+   <br>
+   <h4 id="3-3-1-ssh-key">4.3.1    SSH Key</h4>
+   <ul>
+   <li><p>With a secure shell (SSH) key pair, user can create virtual machines (VMs) in Azure that use SSH keys for authentication.</p>
+  
+   </li>
+   </ul><br>
+   <p><strong>Create SSH Key</strong></p>
+   <ol>
+   <li>Select <strong>SSH key</strong> or select <strong><em>Create New</em></strong>.</li><br>
+   
+   <p><img src="https://user-images.githubusercontent.com/87083633/191261760-bec6a2ba-696a-4ced-8b8d-0b4402a5e779.png" alt="image"></p>
+
+   <li>Provide the following information:</li>
+   <ul>
+   <li><strong>Key Name</strong>: A unique name is required.</li>
+   <li><p>Leave the other options to their defaults.</p>
+   <p><img src="https://user-images.githubusercontent.com/87083633/191261162-f9a832a8-4bb5-4402-bae9-9978b7fc02f8.png" alt="image"></p>
+   </li>
+  </ul>
+ 
+  <br>
+   <li><p>Select <strong><em>Create</em></strong>. </p>
+   </li>
+  </ol>
+   <ul>
+   <li><p>Dashboard of Virtual Machine </p>
+   </li>
+   </ul>
+  
+   <ol>
+   <li><p>Click on  <strong>“+”</strong> icon.</p>
+   <p><img src="https://user-images.githubusercontent.com/87083633/174729351-7990badb-fe35-49d9-82cc-8e51a812d860.png" alt="image"></p>
+   <ul>
+   <li>You can Start, Restart, Stop, Resize and Delete the Virtual Machine.</li>
+   </ul>
+   <p><img src="https://user-images.githubusercontent.com/87083633/174729416-fcaa0331-b1b4-4fdc-ae84-f0cd41a9ebfb.png" alt="image"></p>
+   </li>
+   </ol>
+  <br>
+  
+ <h5><p><strong>Add Disk</strong>:</p></h5>
+ 
+   <ol>
+   <li><p>Select <strong><em>+ Add disk</em></strong>.</p>
+   </li>
+ 
+  
+
+   <li>Provide the information.
+    <h5 id="_note_-"><em><b><u>Note :</u></b></em></h5>
+   </li>
+  <ul>
+   <li><p>storage type is categorized into 4 types:</p> </li>
+   <ul>
+    <li>Premium_LRS (Disk size range : 32 to 32767)</li> 
+    <li>StandardSSD_LRS(Disk size range : 4 to 32767)</li> 
+    <li>Standard_LRS(Disk size range : 32 to 32767)</li>
+    <li>UltraSSD_LRS(Disk size range : 32 to 32767)</li>.
+  </ul>
+   <p> <br> <img src="https://user-images.githubusercontent.com/87083633/174729499-1c5e9bc3-234c-4e5f-ad23-705671d09bd2.png" alt="image"></p>
+  
+  
+  </ul>
+  </ol>
+<br>
+<h5><p><strong>Resize</strong>:</p></h5><br>
+  <ol>
+   <li><p>Select <strong><em>Resize</em></strong> &gt; <strong>Size</strong> &gt; select <strong><em>Resize</em></strong>.</p><br>
+   <p><br><img src="https://user-images.githubusercontent.com/87083633/174729656-30cd2a2b-d192-4cf7-9255-25390a8cbe6f.png" alt="image"></p>
+   </li><br>
+   <li><p>When you select Delete only Virtual Machine, Public IP and Network Interface(netcards) gets deleted.
+  
+   </li>
+ 
+  </ol>
+  <br>
+  <h4 id="3-3-virtual-machine">4.4    ARM Template</h4><br>
+  <ul>
+    <li>Azure Resource Manager templates are JavaScript Object Notation (JSON) files that define the infrastructure and configuration for the project.</li>
+    <br>
+  </ul>
+
+  <h5><p><strong>Downlaod ARM Template</strong></p></h5><br>
+  <ol>
+    <li><p>Select <strong>IaaS tile</strong> &gt; <strong>ARM Template </strong>.</p><br>
+      <p><br><img src="https://user-images.githubusercontent.com/87083633/190565804-57300ee6-5fca-4a22-a22e-7c58c7aee34d.png" alt="image"></p>
+    <li><p>Select <strong>Resource</strong>  &gt; <strong>Count</strong> &gt; <strong><em>Download </em></strong>(.json file will get downloaded)</p></li><br>
+
+    <p><br><img src="https://user-images.githubusercontent.com/87083633/185864953-7ae8788f-b94a-48f7-969d-1026850175ad.png" alt="image"></p>
+    <br>
+
+    <h5 id="_note_-"><em><b><u>Note :</u></b></em></h5>
+    <ul>
+      <li><strong>Resource: </strong> select the resource for which you want the .json template .</li>
+      <li><strong>Count:</strong> number of instances you want, currently we are restricting it to 5.</li><br>
+    </ul>
+  </ol>
+  <ul>
+    <li>If you want to deploy the. json you can deploy in Azure cli or Azure Powershell or any as per your convivence. </li>
+    <li>ARM template can be deployed inside Deploy service (PAAS > App Service > Deploy Service)</li>
+    <li>Before deploying the ARM template inside Deploy Service,you need to add default values in it.</li>
+  </ul> <br>
+
+                            <!-- AZURE DEVOPS -->
+
+  <h3 id="4-iaas-infrastructure-as-a-service-">5.    Azure DevOPs</h3><br>
+  <ul>
+    <li>Azure DevOps is a platform that provides an end-to-end DevOps toolchain for developing and deploying software or Projects. </li>
+    <li>Pipeline and release these two standalone services are provided by Azure Devops.</li>
+    <li>Azure Pipelines provides build and release services to support continuous integration and delivery of your applications.</li><br>
+  </ul>
+  
+
+  <h5><p><strong>Logs of Pipeline and Release</strong></p></h5><br>
+  <ol>
+    <li><p>Select  &gt; <strong>Azure devops</strong>.</p><br>
+      <p><img src="https://user-images.githubusercontent.com/87083633/190566132-b979855f-4e64-483d-a3be-364fd05934ec.png" alt="image"></p>
+    </li>
+
+    <li><p>Select <strong>Type</strong></li><br>
+
+   <ul>
+    <li><strong>For All Organization</strong></li><br>
+   </ul>
+   <ol>
+    <li><p><strong>Provide Token</strong> &gt; <strong><em>+Validate</em></strong></li><br>
+   </ol>
+    <p><img src="https://user-images.githubusercontent.com/87083633/190402633-2d4437b6-7f1b-4c29-9fee-6aaa67f97d43.png" alt="image"></p><br>
+
+    <ul>
+      <li><strong>For Specific Organization</strong></li><br>
+     </ul>
+     <ol>
+      <li><p><strong>Provide Organization</strong> &gt; <strong>Token</strong> &gt; <strong><em>+Validate</em></strong></li><br>
+     </ol>
+      <p><img src="https://user-images.githubusercontent.com/87083633/191242381-531700e7-5e9f-4f55-bd16-26dc7a1f8250.png" alt="image"></p><br>
+
+    <h5 id="_note_-"><em><b><u>Note :</u></b></em></h5>
+    <ul>
+      <li>Generate the token from Azure</li>
+    </ul>
+    <br>
+ 
+    <h5><p><strong>To access Pipeline logs</strong></p></h5><br>
+    <ol>
+      <li><p>Select <strong>Organization</strong>  &gt; <strong><em>Get Pipeline</em></strong></li><br>
+        <p><br><img src="https://user-images.githubusercontent.com/87083633/190403795-830b1ae9-0a41-4871-a259-737f73059e97.png" alt="image"></p><br>
+
+        <li><p>To see the pervious logs select <strong>Logs</strong> and to view new logs along with pervious <strong>Select</strong>  &gt; <strong><em>Run</em></strong> &gt; <strong><em>Logs</em></strong></li><br>
+
+          <p><br><img src="https://user-images.githubusercontent.com/87083633/190404299-9f7f30b3-7e5c-4ed8-afa8-cc126f382058.png" alt="image"></p>
+
+          <li><p>Select <strong><em>Build Logs</em></strong></li><br>
+            <p><br><img src="https://user-images.githubusercontent.com/87083633/191466006-1f51f227-8102-4653-8ac4-7f2d202787f8.png" alt="image"></p><br>
+
+            <li><p>Select <strong><em>Show Logs</em></strong></li><br>
+              <p><br><img src="https://user-images.githubusercontent.com/87083633/191468216-edd0098d-db52-4b53-b7d5-8bfbbc6df828.png" alt="image"></p><br>
+              <p><br><img src="https://user-images.githubusercontent.com/87083633/190405481-11d218e0-7403-4786-93e9-b8a99443b8b4.png" alt="image"></p><br>
+             
+              <li><p><strong>Rename Pipeline </strong></li><br>
+                <ol>
+                  <li><p>Select <strong><em>Rename</em></strong></li><br>
+                    <p><br><img src="https://user-images.githubusercontent.com/87083633/190405876-a1a67688-a45d-4138-8256-988e4755960b.png" alt="image"></p><br>
+
+                  <li><p>Provide <strong>New Name </strong>  &gt;<strong><em>Rename</em></strong></li><br>
+                    <p><br><img src="https://user-images.githubusercontent.com/87083633/190406287-732d9e30-08b5-485c-8a2f-c60454bcb61a.png" alt="image"></p><br>
+                </ol>
+                <li><p><strong>Delete Pipeline </strong></li><br>
+                  <ol>
+                    <li><p>Select <strong><em>Delete</em></strong></li><br>
+                      <p><br><img src="https://user-images.githubusercontent.com/87083633/190406395-f23c4cf2-b6ed-4dde-bc0c-467db365af17.png" alt="image"></p><br>
+                  </ol>            
+    </ol>
+
+    <h5><p><strong>To access Release logs</strong></p></h5><br>
+    <ol>
+      <li><p>Select <strong>Organization</strong>  &gt; <strong><em>Get Release</em></strong></li><br>
+        <p><br><img src="https://user-images.githubusercontent.com/87083633/190407094-0d151387-9626-4375-bcf4-500282e9335f.png" alt="image"></p><br>
+
+        <li><p>Select  <strong><em>Get Release</em></strong></li><br>
+          <p><br><img src="https://user-images.githubusercontent.com/87083633/190407383-15564884-a763-4233-b5f9-12548e8e2674.png" alt="image"></p><br>
+
+          <li><p>To Deploy stages of release</li><br>
+            <ol>
+              <li><p>Select  <strong><em>Stages </em></strong></li><br>
+                <p><br><img src="https://user-images.githubusercontent.com/87083633/190408412-a1dd775f-b064-4680-bff6-bf5b2913d185.png" alt="image"></p><br>
+               
+                <li><p>Select  <strong><em>Deploy </em></strong></li><br>
+                  <p><br><img src="https://user-images.githubusercontent.com/87083633/190408870-e7426b8d-c5d7-4c21-8633-40f640326672.png" alt="image"></p><br>
+            </ol>
+            <li><p>To display the Logs</p></li>
+            <ol>
+              <li><p>Select <strong><em>Logs</em></strong></li><br>
+                <p><br><img src="https://user-images.githubusercontent.com/87083633/190409081-6c206f60-2523-4ef9-92f1-00e30ee5b856.png" alt="image"></p><br>
+                <li><p>Select <strong><em>Get TaskLogs</em></strong></li><br>
+                  <p><br><img src="https://user-images.githubusercontent.com/87083633/190409297-5f5c0aa4-71a4-421c-86fe-5d1f0e7dfe0f.png" alt="image"></p><br>
+                  <li><p>Select <strong><em>Show Logs</em></strong></li><br>
+                    <p><br><img src="https://user-images.githubusercontent.com/87083633/190410192-e34e2695-dfd7-4543-b6a9-062f7c782fd6.png" alt="image"></p><br>
+                    <p><br><img src="https://user-images.githubusercontent.com/87083633/190410385-91544109-eb96-4835-8e3a-681ee1fd6c9c.png" alt="image"></p><br>
+            </ol>
+    </ol>
+   
+  </ol>
+  <br><br><br>
+
+   </body></html>

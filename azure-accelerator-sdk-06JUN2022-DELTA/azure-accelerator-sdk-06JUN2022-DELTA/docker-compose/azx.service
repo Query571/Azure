@@ -1,0 +1,13 @@
+[Unit]
+Description=Example systemd service.
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /opt/docker-compose/up.sh
+Restart=on-failure
+RestartSec=15
+KillMode=process
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target

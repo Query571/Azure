@@ -1,0 +1,110 @@
+stages:
+  #- code-coverage
+  - build
+  - deploy
+
+#angular_coverage:
+#  stage: code-coverage
+#  tags:
+#    - dev-server-ui
+#  only: ['branches']
+#  script:
+#    - sudo chown -R gitlab-runner:gitlab-runner /home/gitlab-runner/
+#    - cd AzureUI && sudo npm install sonar-scanner --save-dev && sudo npm run sonar
+
+angular_demo_build:
+  stage: build
+  tags:
+    - demo
+  only:
+    - xor-azx-demo-UI
+  script:
+    - sudo chown -R gitlab-runner:gitlab-runner /home/gitlab-runner/
+    - sudo chmod 777 docker.sh && sudo ./docker.sh
+    - sudo rm -rf AzureUI/dist
+    - sudo rm -rf AzureUI/node_modules
+
+demo_deploy:
+  stage: deploy
+  tags:
+    - demo
+  only:
+    - xor-azx-demo-UI
+  needs:
+    - angular_demo_build
+  when: manual
+  script:
+    - sudo chmod 777 /opt/docker-compose/up.sh && sudo /opt/docker-compose/up.sh
+
+angular_demo_bkp_clone_build:
+  stage: build
+  tags:
+    - demo_bkp_clone
+  only:
+    - 06JUN2022-DELTA
+  script:
+    - sudo chown -R gitlab-runner:gitlab-runner /home/gitlab-runner/
+    - sudo chmod 777 docker.sh && sudo ./docker.sh
+    - sudo rm -rf AzureUI/dist
+    - sudo rm -rf AzureUI/node_modules
+
+demo_bkp_clone_deploy:
+  stage: deploy
+  tags:
+    - demo_bkp_clone 
+  only:
+    - 06JUN2022-DELTA
+  needs:
+    - angular_demo_bkp_clone_build
+  when: manual
+  script:
+    - sudo chmod 777 /opt/docker-compose/up.sh && sudo /opt/docker-compose/up.sh
+
+angular_demo_bkp_build:
+  stage: build
+  tags:
+    - demo_bkp
+  only:
+    - 06JUN2022-DELTA
+  script:
+    - sudo chown -R gitlab-runner:gitlab-runner /home/gitlab-runner/
+    - sudo chmod 777 docker.sh && sudo ./docker.sh
+    - sudo rm -rf AzureUI/dist
+    - sudo rm -rf AzureUI/node_modules
+
+demo_bkp_deploy:
+  stage: deploy
+  tags:
+    - demo_bkp
+  only:
+    - 06JUN2022-DELTA
+  needs:
+    - angular_demo_bkp_build
+  when: manual
+  script:
+    - sudo chmod 777 /opt/docker-compose/up.sh && sudo /opt/docker-compose/up.sh
+
+angular_demo_bkp_image_build:
+  stage: build
+  tags:
+    - demo_bkp_image
+  only:
+    - 06JUN2022-DELTA
+  script:
+    - sudo chown -R gitlab-runner:gitlab-runner /home/gitlab-runner/
+    - sudo chmod 777 docker.sh && sudo ./docker.sh
+    - sudo rm -rf AzureUI/dist
+    - sudo rm -rf AzureUI/node_modules
+
+demo_bkp_image_deploy:
+  stage: deploy
+  tags:
+    - demo_bkp_image 
+  only:
+    - 06JUN2022-DELTA
+  needs:
+    - angular_demo_bkp_image_build
+  when: manual
+  script:
+    - sudo chmod 777 /opt/docker-compose/up.sh && sudo /opt/docker-compose/up.sh
+

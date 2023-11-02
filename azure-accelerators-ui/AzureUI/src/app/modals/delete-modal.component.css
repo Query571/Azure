@@ -1,0 +1,13 @@
+.delete-modal-footer {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.delete-modal-header {
+    justify-content: center;
+}
+
+.delete-modal-header, .delete-modal-footer {
+    border: none;
+}

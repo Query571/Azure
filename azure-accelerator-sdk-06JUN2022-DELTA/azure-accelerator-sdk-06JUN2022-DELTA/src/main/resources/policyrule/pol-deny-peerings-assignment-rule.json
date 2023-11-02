@@ -1,0 +1,17 @@
+ {
+        "if": {
+          "allof": [
+            {
+              "field": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings/remoteVirtualNetwork.id",
+              "notcontains": "[concat('saz_solutionscriptions/',saz_solutionscription().saz_solutionscriptionId)]"
+            },
+            {
+              "field": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings/remoteVirtualNetwork.id",
+              "notIn": "[parameters('remote-vnets-allowed')]"
+            }
+          ]
+        },
+        "then": {
+          "effect": "Deny"
+        }
+ }
